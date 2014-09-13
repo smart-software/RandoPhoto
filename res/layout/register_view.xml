@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background_color"
+                android:gravity="center"
+                style="@android:style/Theme.NoTitleBar">
+
+    <!-- Logo Text. Use image instead of label -->
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:id="@+id/ivLogo" android:src="@drawable/logo"/>
+
+    <!-- Nickname text edit -->
+    <TextView
+            android:id="@+id/lNickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ivLogo"
+            android:text="@string/email_text"
+            android:layout_marginTop="10dp"/>
+    <EditText
+            android:id="@+id/etNickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lNickname"
+            android:layout_alignLeft="@+id/lEmail"
+            android:ems="10">
+        <requestFocus />
+    </EditText>
+    <!-- End of nickmanem text edit -->
+
+    <!-- Email text edit -->
+    <TextView
+            android:id="@+id/lEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etNickname"
+            android:text="@string/email_text"
+            android:layout_marginTop="10dp"/>
+    <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lEmail"
+            android:layout_alignLeft="@+id/lEmail"
+            android:ems="10">
+        <requestFocus />
+    </EditText>
+    <!-- End of email text edit -->
+
+    <!-- Password text edit -->
+    <TextView
+            android:id="@+id/lPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/password_text"
+            android:layout_below="@+id/etEmail"
+            android:layout_alignLeft="@+id/lEmail"
+            android:layout_marginTop="3dp"/>
+    <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/lPassword"
+            android:layout_alignLeft="@id/etEmail" android:layout_alignRight="@id/etEmail"
+            />
+    <!-- End of password text edit -->
+
+    <!-- Buttons: Login, Register -->
+    <Button
+            android:id="@+id/btnPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/etPassword"
+            android:layout_alignLeft="@id/etPassword" android:layout_alignRight="@id/etPassword"
+            android:text="@string/register_text" android:layout_marginTop="10dp"/>
+    <!-- End of Buttons -->
+
+</RelativeLayout>
