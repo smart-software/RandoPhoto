@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              style="@android:style/Theme.NoTitleBar"
+              android:background="@color/background_color">
+    <!-- Top panel -->
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/top_panel_color">
+        <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/rando_logo"/>
+        </FrameLayout>
+    </LinearLayout>
+    <!-- End of top panel -->
+
+    <!-- TAB HOST HERE -->
+    <TabHost
+            android:id="@android:id/tabhost"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+        <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/tab_widget_color">
+        </TabWidget>
+
+        <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+        </FrameLayout>
+    </TabHost>
+    <!-- END OF TAB HOST -->
+
+    <!-- Bottom panel -->
+    <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/bottom_panel_color">
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"/>
+    </LinearLayout>
+    <!-- End of bottom panel -->
+</LinearLayout>
