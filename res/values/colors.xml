@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="background_color">#FBFCDD</color>
+    <color name="top_panel_color">#C2D0ED</color>
+    <color name="bottom_panel_color">#C2D0ED</color>
+    <color name="tab_widget_color">#99CC99</color>
 </resources>
