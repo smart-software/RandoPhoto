@@ -32,3 +32,4 @@ proguard/
 # Visual studio files
 RandoPhoto/obj/
 RandoPhoto/randophoto_cert.pfx
+*.suo
