@@ -28,3 +28,7 @@ proguard/
 # Idea files
 .idea/
 *.iml
+
+# Visual studio files
+RandoPhoto/obj/
+RandoPhoto/randophoto_cert.pfx

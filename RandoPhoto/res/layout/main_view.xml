@@ -46,20 +46,26 @@
     <!-- END OF TAB HOST -->
 
     <!-- Bottom panel -->
-    <LinearLayout
-            android:orientation="horizontal"
+    <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="@color/bottom_panel_color"
-            android:layout_weight="0">
-        <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/camera_icon"/>
-        <ImageButton
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:src="@drawable/settings_icon"/>
-    </LinearLayout>
+            android:layout_weight="0"
+            android:background="@color/bottom_panel_color">
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/camera_icon"
+                    android:scaleType="centerInside"/>
+            <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/settings_icon"
+                    android:scaleType="centerInside"/>
+        </LinearLayout>
+    </FrameLayout>
     <!-- End of bottom panel -->
 </LinearLayout>
