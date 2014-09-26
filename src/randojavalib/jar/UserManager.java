@@ -24,16 +24,15 @@ public class UserManager implements IUserManager{
 	@Override
 	public ILoggedUser GetCurrentLoggedUser() {
 		ParseUser currentUser = ParseUser.getCurrentUser();
-		ILoggedUser loggedUser = (ILoggedUser) new User(); // моих знаний не хватает. Наверное здесь лучше ILoggedUser loggedUser = new ILoggedUser(); но так Eclipse не позволяет сделать 
+		ILoggedUser loggedUser = null;
 		
 		if (currentUser!=null) {
+		loggedUser = new LoggedUser();
 		loggedUser.SetId(currentUser.getObjectId());
 		loggedUser.SetName(currentUser.getUsername());
 		loggedUser.SetEmail(currentUser.getEmail());
 		}
-		else {
-			loggedUser = null;
-		}
+
 		return loggedUser;
 	}
 
@@ -44,23 +43,23 @@ public class UserManager implements IUserManager{
 		String password = userPassword.trim();
 		
 		if (username.isEmpty() || password.isEmpty()) {
-			// Empty username or password - TODO обработчик ошибки
+			// Empty username or password - TODO Г®ГЎГ°Г ГЎГ®ГІГ·ГЁГЄ Г®ГёГЁГЎГЄГЁ
 		}
 		else {
 			// Login
-			//setProgressBarIndeterminateVisibility(true); тут можно послать в презентер "показать прогресс бар"
+			//setProgressBarIndeterminateVisibility(true); ГІГіГІ Г¬Г®Г¦Г­Г® ГЇГ®Г±Г«Г ГІГј Гў ГЇГ°ГҐГ§ГҐГ­ГІГҐГ° "ГЇГ®ГЄГ Г§Г ГІГј ГЇГ°Г®ГЈГ°ГҐГ±Г± ГЎГ Г°"
 			
 			ParseUser.logInInBackground(username, password, new LogInCallback() {
 				@Override
 				public void done(ParseUser user, ParseException e) {
-					//setProgressBarIndeterminateVisibility(false);  toPresenter "прогресс бар выключить"
+					//setProgressBarIndeterminateVisibility(false);  toPresenter "ГЇГ°Г®ГЈГ°ГҐГ±Г± ГЎГ Г° ГўГ»ГЄГ«ГѕГ·ГЁГІГј"
 					ICallbacksFormBackground callback = new CallbacksFormBackground();
 					if (e == null) {
 						// Success!
 						callback.loginSucess(true, null);
 					}
 					else {
-						//не залогинился
+						//Г­ГҐ Г§Г Г«Г®ГЈГЁГ­ГЁГ«Г±Гї
 						callback.loginSucess(false, "Exception: "+e);
 					}
 				}
@@ -82,16 +81,16 @@ public class UserManager implements IUserManager{
 		String password = userPassword.trim();
 		String email = userEmail.trim();
 		
-		final  boolean success = true; // это заглушка. В будущем надо запилить колллбек.
+		final  boolean success = true; // ГЅГІГ® Г§Г ГЈГ«ГіГёГЄГ . Г‚ ГЎГіГ¤ГіГ№ГҐГ¬ Г­Г Г¤Г® Г§Г ГЇГЁГ«ГЁГІГј ГЄГ®Г«Г«Г«ГЎГҐГЄ.
 		
 		if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
-			//something missing - проверка на наличие данных
+			//something missing - ГЇГ°Г®ГўГҐГ°ГЄГ  Г­Г  Г­Г Г«ГЁГ·ГЁГҐ Г¤Г Г­Г­Г»Гµ
 			ICallbacksFormBackground callback = new CallbacksFormBackground();
 			callback.registerSucess(false, "Exception: Empty username or password or email");
 		}
 		else {
 			// create the new user!
-			//setProgressBarIndeterminateVisibility(true); прогресс бар - on
+			//setProgressBarIndeterminateVisibility(true); ГЇГ°Г®ГЈГ°ГҐГ±Г± ГЎГ Г° - on
 			
 			ParseUser newUser = new ParseUser();
 			newUser.setUsername(username);
@@ -140,7 +139,7 @@ public class UserManager implements IUserManager{
 
 	@Override
 	public void initializeParse(Context context) {
-		Intent intent = new Intent(context, ParseInitialize.class); // не уверен, сработатет ли отсюда. Но запустить все равное необходимо.
+		Intent intent = new Intent(context, ParseInitialize.class); // Г­ГҐ ГіГўГҐГ°ГҐГ­, Г±Г°Г ГЎГ®ГІГ ГІГҐГІ Г«ГЁ Г®ГІГ±ГѕГ¤Г . ГЌГ® Г§Г ГЇГіГ±ГІГЁГІГј ГўГ±ГҐ Г°Г ГўГ­Г®ГҐ Г­ГҐГ®ГЎГµГ®Г¤ГЁГ¬Г®.
 		context.startActivity(intent);
 	}
 
