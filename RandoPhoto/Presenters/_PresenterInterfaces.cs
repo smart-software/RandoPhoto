@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SimpleIOC;
 
-namespace RandoPhoto.Models
+namespace RandoPhoto.Presenters
 {
-    interface IBaseModel
+    public interface IBasePresenter : IContainerObject
     {
     }
 }

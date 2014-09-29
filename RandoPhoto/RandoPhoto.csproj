@@ -58,9 +58,11 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\_ModelInterfaces.cs" />
+    <Compile Include="Presenters\LoginPresenter.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
+    <Compile Include="Presenters\_PresenterInterfaces.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Stubs\UserModelStub.cs" />
     <Compile Include="Views\LoginActivity.cs" />
     <Compile Include="Views\MainActivity.cs" />
     <Compile Include="Views\_ViewInterfaces.cs" />
@@ -86,7 +88,9 @@
     <ValuesResource Include="res\values\styles.xml" />
     <ValuesResource Include="res\values\values-ru\strings.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -9,7 +9,9 @@ using RandoPhoto.Presenters;
 
 namespace RandoPhoto
 {
-    [Application("RandoPhoto")]
+    using RandoPhoto.Stubs;
+
+    [Application("RandoPhoto", Theme = "@android:style/Theme.NoTitleBar")]
     public class Program : Application
     {
         public static CSimpleIoCContainer Container { get; private set; }
@@ -18,10 +20,25 @@ namespace RandoPhoto
         {
             // Create IoC Container
             Program.Container = new CSimpleIoCContainer();
+
+            // Register ViewManager
+            Program.Container.Register<IViewManager, ViewManager>(null);
+            
+            // Register debug models stubs
+            Program.Container.Register<IUserManager, UserManagerStub>(null);
+
+            // Register view interfaces
             Program.Container.Register<IMainView, MainActivity>(null);
-            Program.Container.Register<MainPresenter, MainPresenter>(new List<Type>() 
+            Program.Container.Register<ILoginView, LoginActivity>(null);
+
+            // Register presenter interfaces (LifeCycle.Transient)
+            Program.Container.Register<MainPresenter, MainPresenter>(LifeCycle.Transient, new List<Type>() 
             {
                 typeof(IMainView)
+            });
+            Program.Container.Register<LoginPresenter, LoginPresenter>(LifeCycle.Transient, new List<Type>()
+            {
+                typeof(ILoginView)
             });
         }
 

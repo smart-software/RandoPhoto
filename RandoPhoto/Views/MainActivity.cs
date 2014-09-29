@@ -6,6 +6,7 @@ using Dot42;
 using Dot42.Manifest;
 using RandoPhoto.Views;
 using RandoPhoto.Presenters;
+using Android.Content;
 
 namespace RandoPhoto
 {
@@ -15,20 +16,21 @@ namespace RandoPhoto
         public MainActivity() 
             : base()
         {
-            Program.Container.RegisterObject<IMainView, MainActivity>(this);
-            // Надо инициализировать MainPresenter.
-            // В результате инициализации BL по отображению MainView лежит на созданном MainPresenter.
+            Program.Container.ResolveToObject<IMainView, MainActivity>(this);
             Program.Container.Resolve(typeof(MainPresenter));
         }
 
         protected override void OnCreate(Bundle savedInstance)
         {
             base.OnCreate(savedInstance);
-            // !!!! Надо оповестить Presenter, что Activity создается через событие !!!!
-            if (this.OnCreateView != null) this.OnCreateView(this, new EventArgs()); 
+           
+            IViewManager viewManager = Program.Container.Resolve(typeof(IViewManager)) as IViewManager;
+            viewManager.CurrentView = this;
+
+            if (this.OnCreateView != null) this.OnCreateView(this, new EventArgs());
         }
 
-        public void ShowView()
+        public void SetContent()
         {
             SetContentView(R.Layouts.main_view);
         }

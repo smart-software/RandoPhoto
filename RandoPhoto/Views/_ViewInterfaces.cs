@@ -5,9 +5,9 @@ using System.Text;
 
 namespace RandoPhoto.Views
 {
-    interface IBaseView
+    public interface IBaseView
     {
-        void ShowView();
+        void SetContent();
         event EventHandler<EventArgs> OnCreateView;
     }
 

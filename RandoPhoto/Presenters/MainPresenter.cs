@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SimpleIOC;
+using RandoPhoto.Presenters;
 using RandoPhoto.Views;
 
 namespace RandoPhoto.Presenters
 {
-    public sealed class MainPresenter : IContainerObject
+    using RandoPhoto.Stubs;
+
+    public sealed class MainPresenter : IBasePresenter
     {
         private IMainView m_mainView;
 
@@ -19,8 +21,18 @@ namespace RandoPhoto.Presenters
 
         public void OnCreateView(object sender, EventArgs e)
         {
-            // Тут проверяем, залогинен ли пользователь. Если да, то все ОК, вызываем 
-            m_mainView.ShowView();
+            IUserManager userManager = (IUserManager)Program.Container.Resolve(typeof(IUserManager));
+            ILoggedUser loggedUser = userManager.GetCurrentUser();
+
+            if (loggedUser != null)
+            {
+                m_mainView.SetContent();
+            }
+            else
+            {
+                IViewManager viewManager = Program.Container.Resolve(typeof(IViewManager)) as IViewManager;
+                viewManager.ShowView<ILoginView, LoginPresenter>(false);
+            }
         }
     }
 }
