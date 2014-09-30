@@ -1,14 +1,23 @@
 package randojavalib.jar;
 
 
+import java.util.ArrayList;
+
 import randojavalib.jar.Interfaces.ICallbacksFormBackground;
 import randojavalib.jar.Interfaces.ILoggedUser;
 import randojavalib.jar.Interfaces.IUser;
+import randojavalib.jar.Interfaces.IUserLoginListener;
+import randojavalib.jar.Interfaces.IUserLoginResult;
 import randojavalib.jar.Interfaces.IUserManager;
+import randojavalib.jar.Interfaces.IUserRegisterListener;
+import randojavalib.jar.Interfaces.IUserRegisterResult;
+import randojavalib.jar.Interfaces.LOGINRESULT;
+import randojavalib.jar.Interfaces.REGISTERRESULT;
 
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import com.parse.GetCallback;
 import com.parse.LogInCallback;
@@ -20,6 +29,8 @@ import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 public class UserManager implements IUserManager{
+	
+	String TAG = "User Manager";
 
 	@Override
 	public ILoggedUser GetCurrentLoggedUser() {
@@ -37,7 +48,7 @@ public class UserManager implements IUserManager{
 	}
 
 	@Override
-	public ILoggedUser LogIn(String userName, String userPassword) {
+	public  void LogIn(String userName, String userPassword) {
 
 		String username = userName.trim();
 		String password = userPassword.trim();
@@ -53,27 +64,45 @@ public class UserManager implements IUserManager{
 				@Override
 				public void done(ParseUser user, ParseException e) {
 					//setProgressBarIndeterminateVisibility(false);  toPresenter "прогресс бар выключить"
-					ICallbacksFormBackground callback = new CallbacksFormBackground();
 					if (e == null) {
 						// Success!
-						callback.loginSucess(true, null);
+						
+						ILoggedUser userLogged = new LoggedUser();
+						userLogged.SetId(user.getObjectId());
+						userLogged.SetName(user.getUsername());
+						userLogged.SetEmail(user.getEmail());
+						Log.d(TAG, "User logged in.");
+						fireLoginResult(userLogged, LOGINRESULT.SUCCESS);
 					}
 					else {
-						//не залогинилс€
-						callback.loginSucess(false, "Exception: "+e);
+						//Login - failed
+						LOGINRESULT exception;
+						switch (e.getCode()) {
+						case 201 | 200: // hope this condition will work
+							exception = LOGINRESULT.BADPASSWORD;
+							break;
+						case 205 | 207: 
+							exception = LOGINRESULT.NOTEXIST;
+							break;
+						default:
+							exception = LOGINRESULT.UNDEFINED;
+							break;
+						}
+						Log.d(TAG, "User login fail. Error: " + e);
+						fireLoginResult(null, exception); 
 					}
 				}
 			});
 		}
-		
-		return null;
 	}
 
 	@Override
 	public void LogOff(ILoggedUser user) {
 		ParseUser.logOut();
 	}
-
+	
+	private ParseUser newUser;
+	
 	@Override
 	public void RegisterUser(String userName,String userPassword, String userEmail) {
 		
@@ -81,18 +110,15 @@ public class UserManager implements IUserManager{
 		String password = userPassword.trim();
 		String email = userEmail.trim();
 		
-		final  boolean success = true; // это заглушка. ¬ будущем надо запилить колллбек.
-		
 		if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
-			//something missing - проверка на наличие данных
-			ICallbacksFormBackground callback = new CallbacksFormBackground();
-			callback.registerSucess(false, "Exception: Empty username or password or email");
+			//something missing - check for empty data
+			fireRegisterResult(null, REGISTERRESULT.EMPTYDATA);
 		}
 		else {
 			// create the new user!
-			//setProgressBarIndeterminateVisibility(true); прогресс бар - on
+			//setProgressBarIndeterminateVisibility(true); 
 			
-			ParseUser newUser = new ParseUser();
+			newUser = new ParseUser();
 			newUser.setUsername(username);
 			newUser.setPassword(password);
 			newUser.setEmail(email);
@@ -101,14 +127,30 @@ public class UserManager implements IUserManager{
 				public void done(ParseException e) {
 					//setProgressBarIndeterminateVisibility(false);
 					
-					ICallbacksFormBackground callback = new CallbacksFormBackground();
 					if (e == null) {
 						// Success!
-						//success = true;
-						callback.registerSucess(true, null);
+						IUser user = new User();
+						user.SetId(newUser.getObjectId());
+						user.SetName(newUser.getUsername());
+						user.SetEmail(newUser.getEmail());
+						Log.d(TAG, "New user registered");
+						fireRegisterResult(user, REGISTERRESULT.SUCCESS);
 					}
 					else {
-						callback.registerSucess(false, "Exception: "+e);
+						REGISTERRESULT exception;
+						switch (e.getCode()) {
+						case 202:
+							exception = REGISTERRESULT.USEREXISTS;
+							break;
+						case 201:
+							exception = REGISTERRESULT.BADPASSWORD;
+							break;
+						default:
+							exception = REGISTERRESULT.UNDEFINED;
+							break;
+						}
+						Log.d(TAG, "New user register fail. Error: " + e);
+						fireRegisterResult(null, exception);
 					}
 				}
 			});
@@ -144,5 +186,44 @@ public class UserManager implements IUserManager{
 	}
 
 	
+	
+	// --Listeners section--
+	private ArrayList<IUserRegisterListener> listenersRegister = new ArrayList<IUserRegisterListener>();
+	private ArrayList<IUserLoginListener> listenersLogin = new ArrayList<IUserLoginListener>();
+	
+	@Override
+	public void AddUserRegisterListener(IUserRegisterListener userListener) {
+		listenersRegister.add(userListener);
+	}
+	
+	@Override
+	public void AddUserLoginListener(IUserLoginListener userListener) {
+		listenersLogin.add(userListener);
+	}
+
+	@Override
+	public void RemoveUserRegisterListener(IUserRegisterListener userListener) {
+		listenersRegister.remove(userListener);
+	}
+
+	@Override
+	public void RemoveUserLoginListener(IUserLoginListener userListener) {
+		listenersLogin.remove(userListener);
+	}
+
+
+	protected void fireRegisterResult(IUser user, REGISTERRESULT exception) {
+		IUserRegisterResult event = new UserRegisterEvent(user, exception);
+
+		for (IUserRegisterListener listener: listenersRegister)
+			listener.OnUserRegister(event);
+	}
+	
+	protected void fireLoginResult(ILoggedUser user, LOGINRESULT exception) {
+		IUserLoginResult event = new UserLoginEvent(user, exception);
+
+		for (IUserLoginListener listener: listenersLogin)
+			listener.OnUserLogin(event);
+	}
 
 }
