@@ -6,76 +6,71 @@ import randojavalib.jar.Interfaces.IUser;
 
 public class Interfaces {
 
-	public interface ILoggedUser extends IUser {
-
+	/* Sequence of interfaces in file:
+	  	1. IUser
+		2. ILoggedUser
+		3. enum LOGINRESULT
+		4. IUserLoginResult
+		5. enum REGISTERRESULT
+		6. IUserRegisterResult
+		7. IUserManager
+	 */
+	
+	public interface IUser {
 		
+		public String GetUID(); //Unique id for user. Consists from letters (all cases) and digits
+		public String GetName(); //username - can be formed from letters (all cases) and digits
+		public void SetName(String userName); // Sets the name in IUser
+		public void SetId(String UserId); // Sets the id in IUser
+		public void SetEmail(String email); // Sets the email in IUser
+	}
+	public interface ILoggedUser extends IUser {
+		//the same as IUser, but different name
 	}
 	
+    public enum LOGINRESULT { 
+        SUCCESS, BADPASSWORD, NOTEXIST, UNDEFINED //for IUserLoginResult
+    }
+    // Realization class should extend EventObject!
+    public interface IUserLoginResult {
+        LOGINRESULT GetUserLoginResult(); //See LOGINRESULT for possible values
+        ILoggedUser GetLoggedUser(); // Returns null if login failed
+    }
+    
+    public enum REGISTERRESULT { 
+        SUCCESS, USEREXISTS, BADPASSWORD, EMPTYDATA,UNDEFINED //for IUserRegisterResult
+    }
+    // Realization class should extend EventObject!
+    public interface IUserRegisterResult { 
+       REGISTERRESULT GetUserRegisterResult(); //see REGISTERRESULT for possible values
+       IUser GetRegisteredUser(); // null if Register failed
+    }
+    
+    
 	public interface IUserManager {
 		
-	public void initializeParse(Context context);
-	public ILoggedUser GetCurrentLoggedUser();
+	public void initializeParse(Context context); //Not necessary, depends on how Parse.initialize will be executed
+	public ILoggedUser GetCurrentLoggedUser(); //Returns current user by ParseUser.getCurrantUser (locally). Returns null if no logged user. - fast
 
-	public void LogIn(String userName, String userPassword);
-	public void LogOff(ILoggedUser user);
+	public void LogIn(String userName, String userPassword); //Login registered user - background web task - ~1 sec
+	public void LogOff(ILoggedUser user); // Logoff current user - locally, web access optional - fast
 
-	// В случае, если user зарегистрирован, то GetCurrentLoggedUser должна возвращать ILoggedUser
-	public void RegisterUser(String userName, String userPassword, String userEmail);
+	public void RegisterUser(String userName, String userPassword, String userEmail); // Register user - web background task - ~1 sec
 
-	public void GetUserByID(String ID);
+	public void GetUserByID(String ID); //Returns user by id (unique) - web background task - ~1 sec
 	
-	void AddUserRegisterListener(IUserRegisterListener userListener);
+	void AddUserRegisterListener(IUserRegisterListener userListener); //Adds listeners
 	void AddUserLoginListener(IUserLoginListener userListener);
-    void RemoveUserRegisterListener(IUserRegisterListener userListener);
+    void RemoveUserRegisterListener(IUserRegisterListener userListener); //removes listeners
     void RemoveUserLoginListener(IUserLoginListener userListener);
 	
 	}
 	
-	public interface IUser {
-		
-		public String GetUID();
-		public String GetName();
-		public void SetName(String userName);
-		public void SetId(String UserId);
-		public void SetEmail(String email);
-	}
-	
-	public interface ICallbacksFormBackground {
-
-		public void loginSucess(boolean state, String exception);
-
-		public void registerSucess(boolean state, String exception);
-
-		public void returnGetUserByID(IUser user);
-		
-	}
-	
-	public enum REGISTERRESULT {
-        SUCCESS, USEREXISTS, BADPASSWORD, EMPTYDATA,UNDEFINED
-    }
-	
-	// Realization class should extend EventObject!
-    public interface IUserRegisterResult { 
-       REGISTERRESULT GetUserRegisterResult();
-       IUser GetRegisteredUser(); // null if Register failed
-    }
-    
 
     // Don't realize this interface
     public interface IUserRegisterListener {
         void OnUserRegister(IUserRegisterResult registerResult);
     }
-    
-    public enum LOGINRESULT { 
-        SUCCESS, BADPASSWORD, NOTEXIST, UNDEFINED
-    }
-    
-    // Realization class should extend EventObject!
-    public interface IUserLoginResult {
-        LOGINRESULT GetUserLoginResult();
-        ILoggedUser GetLoggedUser();
-    }
-    
     // Don't realize this interface
     public interface IUserLoginListener {
         void OnUserLogin(IUserLoginResult loginResult);

@@ -3,7 +3,6 @@ package randojavalib.jar;
 
 import java.util.ArrayList;
 
-import randojavalib.jar.Interfaces.ICallbacksFormBackground;
 import randojavalib.jar.Interfaces.ILoggedUser;
 import randojavalib.jar.Interfaces.IUser;
 import randojavalib.jar.Interfaces.IUserLoginListener;
@@ -32,6 +31,7 @@ public class UserManager implements IUserManager{
 	
 	String TAG = "User Manager";
 
+
 	@Override
 	public ILoggedUser GetCurrentLoggedUser() {
 		ParseUser currentUser = ParseUser.getCurrentUser();
@@ -50,17 +50,11 @@ public class UserManager implements IUserManager{
 	@Override
 	public  void LogIn(String userName, String userPassword) {
 
-		String username = userName.trim();
-		String password = userPassword.trim();
-		
-		if (username.isEmpty() || password.isEmpty()) {
-			// Empty username or password - TODO обработчик ошибки
-		}
-		else {
+
 			// Login
 			//setProgressBarIndeterminateVisibility(true); тут можно послать в презентер "показать прогресс бар"
 			
-			ParseUser.logInInBackground(username, password, new LogInCallback() {
+			ParseUser.logInInBackground(userName, userPassword, new LogInCallback() {
 				@Override
 				public void done(ParseUser user, ParseException e) {
 					//setProgressBarIndeterminateVisibility(false);  toPresenter "прогресс бар выключить"
@@ -94,34 +88,25 @@ public class UserManager implements IUserManager{
 				}
 			});
 		}
-	}
+
 
 	@Override
 	public void LogOff(ILoggedUser user) {
 		ParseUser.logOut();
 	}
 	
-	private ParseUser newUser;
+	
 	
 	@Override
 	public void RegisterUser(String userName,String userPassword, String userEmail) {
 		
-		String username = userName.trim();
-		String password = userPassword.trim();
-		String email = userEmail.trim();
-		
-		if (username.isEmpty() || password.isEmpty() || email.isEmpty()) {
-			//something missing - check for empty data
-			fireRegisterResult(null, REGISTERRESULT.EMPTYDATA);
-		}
-		else {
+
 			// create the new user!
 			//setProgressBarIndeterminateVisibility(true); 
-			
-			newUser = new ParseUser();
-			newUser.setUsername(username);
-			newUser.setPassword(password);
-			newUser.setEmail(email);
+			final ParseUser newUser = new ParseUser();
+			newUser.setUsername(userName);
+			newUser.setPassword(userPassword);
+			newUser.setEmail(userEmail);
 			newUser.signUpInBackground(new SignUpCallback() {
 				@Override
 				public void done(ParseException e) {
@@ -156,7 +141,6 @@ public class UserManager implements IUserManager{
 			});
 		}
 
-	}
 
 	@Override
 	public  void GetUserByID(String ID) {
@@ -171,9 +155,7 @@ public class UserManager implements IUserManager{
 					user.SetId(object.getObjectId());
 					user.SetName(object.getString(ParseConstants.KEY_USERNAME));
 					user.SetEmail(object.getString(ParseConstants.KEY_EMAIL));
-					
-					ICallbacksFormBackground callback = new CallbacksFormBackground();
-					callback.returnGetUserByID(user);
+
 				}
 			}
 		});
@@ -212,14 +194,14 @@ public class UserManager implements IUserManager{
 	}
 
 
-	protected void fireRegisterResult(IUser user, REGISTERRESULT exception) {
+	private void fireRegisterResult(IUser user, REGISTERRESULT exception) {
 		IUserRegisterResult event = new UserRegisterEvent(user, exception);
 
 		for (IUserRegisterListener listener: listenersRegister)
 			listener.OnUserRegister(event);
 	}
 	
-	protected void fireLoginResult(ILoggedUser user, LOGINRESULT exception) {
+	private  void fireLoginResult(ILoggedUser user, LOGINRESULT exception) {
 		IUserLoginResult event = new UserLoginEvent(user, exception);
 
 		for (IUserLoginListener listener: listenersLogin)

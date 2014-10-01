@@ -1,8 +1,10 @@
 package randojavalib.jar;
 
+import com.parse.Parse;
+
 import android.app.Application;
 
-import com.parse.Parse;
+
 
 public class ParseInitialize extends Application{
 	
