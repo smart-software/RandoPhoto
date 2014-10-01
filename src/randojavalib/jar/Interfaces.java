@@ -7,14 +7,20 @@ import randojavalib.jar.Interfaces.IUser;
 public class Interfaces {
 
 	/* Sequence of interfaces in file:
-	  	1. IUser
-		2. ILoggedUser
-		3. enum LOGINRESULT
-		4. IUserLoginResult
-		5. enum REGISTERRESULT
-		6. IUserRegisterResult
-		7. IUserManager
+	 	1. IParseInitialize
+	  	2. IUser
+		3. ILoggedUser
+		4. enum LOGINRESULT
+		5. IUserLoginResult
+		6. enum REGISTERRESULT
+		7. IUserRegisterResult
+		8. IUserManager
 	 */
+	
+	
+	public interface IParseInitialize {
+		
+	}
 	
 	public interface IUser {
 		
@@ -65,7 +71,7 @@ public class Interfaces {
     void RemoveUserLoginListener(IUserLoginListener userListener);
 	
 	}
-	
+
 
     // Don't realize this interface
     public interface IUserRegisterListener {
