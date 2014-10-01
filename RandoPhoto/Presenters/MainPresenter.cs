@@ -16,7 +16,7 @@ namespace RandoPhoto.Presenters
         public void SetDependency(Dictionary<Type, object> dependencyList)
         {
             m_mainView = dependencyList[typeof(IMainView)] as IMainView;
-            m_mainView.OnCreateView += OnCreateView;
+            m_mainView.OnCreateViewEvent += OnCreateView;
         }
 
         public void OnCreateView(object sender, EventArgs e)

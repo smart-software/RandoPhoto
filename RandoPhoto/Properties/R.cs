@@ -47,25 +47,27 @@ namespace RandoPhoto
         public sealed class Ids
         {
             
-            public const int ivLogo = 0x7f050035;
+            public const int logolayout = 0x7f050035;
             
-            public const int lEmail = 0x7f050036;
+            public const int ivLogo = 0x7f050036;
             
-            public const int etEmail = 0x7f050037;
+            public const int lEmail = 0x7f050037;
             
-            public const int lPassword = 0x7f050038;
+            public const int etEmail = 0x7f050038;
             
-            public const int etPassword = 0x7f050039;
+            public const int lPassword = 0x7f050039;
             
-            public const int btnLogin = 0x7f05003a;
+            public const int etPassword = 0x7f05003a;
             
-            public const int btnRegister = 0x7f05003b;
+            public const int btnLogin = 0x7f05003b;
             
-            public const int lNickname = 0x7f05003c;
+            public const int btnRegister = 0x7f05003c;
             
-            public const int etNickname = 0x7f05003d;
+            public const int lNickname = 0x7f05003d;
             
-            public const int btnPassword = 0x7f05003e;
+            public const int etNickname = 0x7f05003e;
+            
+            public const int btnPassword = 0x7f05003f;
         }
         
         public sealed class Strings

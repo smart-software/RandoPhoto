@@ -8,18 +8,38 @@
                 style="@android:style/Theme.NoTitleBar">
 
     <!-- Logo Text. Use image instead of label -->
-    <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:id="@+id/ivLogo" android:src="@drawable/rando_logo"/>
+    <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:id="@+id/logolayout"
+          android:weightSum="10">
+      
+      <Space
+          android:layout_height="match_parent"
+          android:layout_width="0dp"
+          android:layout_weight="1.5"
+          />
+      <ImageView
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:scaleType="fitXY"
+          android:src="@drawable/rando_logo"
+          android:id="@+id/ivLogo"
+          android:layout_weight="7"
+          />
+      <Space
+          android:layout_height="match_parent"
+          android:layout_width="0dp"
+          android:layout_weight="1.5"
+          />
+    </LinearLayout>
 
     <!-- Nickname text edit -->
     <TextView
             android:id="@+id/lNickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ivLogo"
+            android:layout_below="@+id/logolayout"
             android:text="@string/email_text"
             android:layout_marginTop="10dp"/>
     <EditText
@@ -48,7 +68,6 @@
             android:layout_below="@+id/lEmail"
             android:layout_alignLeft="@+id/lEmail"
             android:ems="10">
-        <requestFocus />
     </EditText>
     <!-- End of email text edit -->
 

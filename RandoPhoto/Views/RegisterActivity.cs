@@ -4,26 +4,22 @@ using Android.Os;
 using Android.Widget;
 using Dot42;
 using Dot42.Manifest;
-using RandoPhoto.Views;
 using RandoPhoto.Presenters;
-using Android.Content;
 
-namespace RandoPhoto
+namespace RandoPhoto.Views
 {
-    [Activity]
-    public class MainActivity : Activity, IMainView
+    [Activity(Label = "RegisterActivity", VisibleInLauncher = false)]
+    public class RegisterActivity : Activity, IRegisterView
     {
-        public MainActivity() 
-            : base()
+        public RegisterActivity()
         {
-            Program.Container.ResolveToObject<IMainView, MainActivity>(this);
-            Program.Container.Resolve(typeof(MainPresenter));
+            Program.Container.ResolveToObject<IRegisterView, RegisterActivity>(this);
+            Program.Container.Resolve(typeof(RegisterPresenter));
         }
 
         protected override void OnCreate(Bundle savedInstance)
         {
             base.OnCreate(savedInstance);
-           
             IViewManager viewManager = Program.Container.Resolve(typeof(IViewManager)) as IViewManager;
             viewManager.CurrentView = this;
 
@@ -32,9 +28,9 @@ namespace RandoPhoto
 
         public void SetContent()
         {
-            SetContentView(R.Layouts.main_view);
+            SetContentView(R.Layouts.register_view);
         }
 
-        public new event EventHandler<EventArgs> OnCreateViewEvent;
+        public event EventHandler<EventArgs> OnCreateViewEvent;
     }
 }

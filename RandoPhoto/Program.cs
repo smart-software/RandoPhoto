@@ -30,6 +30,7 @@ namespace RandoPhoto
             // Register view interfaces
             Program.Container.Register<IMainView, MainActivity>(null);
             Program.Container.Register<ILoginView, LoginActivity>(null);
+            Program.Container.Register<IRegisterView, RegisterActivity>(null);
 
             // Register presenter interfaces (LifeCycle.Transient)
             Program.Container.Register<MainPresenter, MainPresenter>(LifeCycle.Transient, new List<Type>() 
@@ -39,6 +40,10 @@ namespace RandoPhoto
             Program.Container.Register<LoginPresenter, LoginPresenter>(LifeCycle.Transient, new List<Type>()
             {
                 typeof(ILoginView)
+            });
+            Program.Container.Register<RegisterPresenter, RegisterPresenter>(LifeCycle.Transient, new List<Type>()
+            {
+                typeof(IRegisterView)
             });
         }
 

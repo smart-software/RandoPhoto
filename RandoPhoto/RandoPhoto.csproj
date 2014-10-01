@@ -58,11 +58,13 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Presenters\RegisterPresenter.cs" />
     <Compile Include="Presenters\LoginPresenter.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
     <Compile Include="Presenters\_PresenterInterfaces.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Stubs\UserModelStub.cs" />
+    <Compile Include="Views\RegisterActivity.cs" />
     <Compile Include="Views\LoginActivity.cs" />
     <Compile Include="Views\MainActivity.cs" />
     <Compile Include="Views\_ViewInterfaces.cs" />
@@ -80,7 +82,9 @@
     <DrawableResource Include="res\drawable-ldpi\ic_launcher.png" />
     <DrawableResource Include="res\drawable-mdpi\ic_launcher.png" />
     <DrawableResource Include="res\drawable-xhdpi\ic_launcher.png" />
-    <LayoutResource Include="res\layout\login_view.xml" />
+    <LayoutResource Include="res\layout\login_view.xml">
+      <SubType>Designer</SubType>
+    </LayoutResource>
     <LayoutResource Include="res\layout\main_view.xml" />
     <LayoutResource Include="res\layout\register_view.xml" />
     <ValuesResource Include="res\values\colors.xml" />
