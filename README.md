@@ -1,4 +1,0 @@
-RandoPhoto
-==========
-
-Random photo app
