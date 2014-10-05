@@ -58,12 +58,14 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\UserModel.cs" />
+    <Compile Include="Models\_UserInterfaces.cs" />
     <Compile Include="Presenters\RegisterPresenter.cs" />
     <Compile Include="Presenters\LoginPresenter.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
     <Compile Include="Presenters\_PresenterInterfaces.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Stubs\UserModelStub.cs" />
+    <Compile Include="Models\LibraryManager.cs" />
     <Compile Include="Views\RegisterActivity.cs" />
     <Compile Include="Views\LoginActivity.cs" />
     <Compile Include="Views\MainActivity.cs" />
@@ -88,12 +90,17 @@
     <LayoutResource Include="res\layout\main_view.xml" />
     <LayoutResource Include="res\layout\register_view.xml" />
     <ValuesResource Include="res\values\colors.xml" />
-    <ValuesResource Include="res\values\strings.xml" />
+    <ValuesResource Include="res\values\strings.xml">
+      <SubType>Designer</SubType>
+    </ValuesResource>
     <ValuesResource Include="res\values\styles.xml" />
-    <ValuesResource Include="res\values\values-ru\strings.xml" />
+    <ValuesResource Include="res\values\values-ru\strings.xml">
+      <SubType>Designer</SubType>
+    </ValuesResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="res\layout\tabs\" />
+    <Folder Include="Stubs\" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

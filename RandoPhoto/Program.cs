@@ -4,13 +4,13 @@ using Android.App;
 using Android.Util;
 using Dot42.Manifest;
 using SimpleIOC;
+using RandoPhoto.Models;
+using RandoPhoto.Models.UserModel;
 using RandoPhoto.Views;
 using RandoPhoto.Presenters;
 
 namespace RandoPhoto
 {
-    using RandoPhoto.Stubs;
-
     [Application("RandoPhoto", Theme = "@android:style/Theme.NoTitleBar")]
     public class Program : Application
     {
@@ -21,12 +21,12 @@ namespace RandoPhoto
             // Create IoC Container
             Program.Container = new CSimpleIoCContainer();
 
+            // Regster UserManager
+            Program.Container.Register<IUserManager, UserManager>(null);
+
             // Register ViewManager
             Program.Container.Register<IViewManager, ViewManager>(null);
             
-            // Register debug models stubs
-            Program.Container.Register<IUserManager, UserManagerStub>(null);
-
             // Register view interfaces
             Program.Container.Register<IMainView, MainActivity>(null);
             Program.Container.Register<ILoginView, LoginActivity>(null);
@@ -50,7 +50,9 @@ namespace RandoPhoto
         public override void OnCreate()
         {
             base.OnCreate();
+
             Bootstrap();
+            RandoLibraryManager.InitializeLibrary(this);
         }
 
         public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)

@@ -33,8 +33,11 @@ namespace RandoPhoto
         public void SetContent()
         {
             SetContentView(R.Layouts.main_view);
+
+            TabHost tabHost = FindViewById<TabHost>(Android.R.Id.Tabhost);
+            tabHost.Setup();
         }
 
-        public new event EventHandler<EventArgs> OnCreateViewEvent;
+        public event EventHandler<EventArgs> OnCreateViewEvent;
     }
 }

@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using RandoPhoto.Presenters;
 using RandoPhoto.Views;
+using RandoPhoto.Models.UserModel;
 
 namespace RandoPhoto.Presenters
 {
-    using RandoPhoto.Stubs;
-
     public sealed class MainPresenter : IBasePresenter
     {
         private IMainView m_mainView;
