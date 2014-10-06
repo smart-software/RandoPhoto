@@ -1,12 +1,14 @@
 package randojavalib.jar;
 
+import randojavalib.jar.Interfaces.IParseInitialize;
+
 import com.parse.Parse;
 
 import android.app.Application;
 
 
 
-public class ParseInitialize extends Application{
+public class ParseInitialize extends Application implements IParseInitialize{
 	
 	@Override
 	public void onCreate() {

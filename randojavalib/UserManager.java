@@ -5,9 +5,11 @@ import java.util.ArrayList;
 
 import randojavalib.jar.Interfaces.ILoggedUser;
 import randojavalib.jar.Interfaces.IUser;
+import randojavalib.jar.Interfaces.IUserLoginCallback;
 import randojavalib.jar.Interfaces.IUserLoginListener;
 import randojavalib.jar.Interfaces.IUserLoginResult;
 import randojavalib.jar.Interfaces.IUserManager;
+import randojavalib.jar.Interfaces.IUserRegisterCallback;
 import randojavalib.jar.Interfaces.IUserRegisterListener;
 import randojavalib.jar.Interfaces.IUserRegisterResult;
 import randojavalib.jar.Interfaces.LOGINRESULT;
@@ -33,7 +35,7 @@ public class UserManager implements IUserManager{
 
 
 	@Override
-	public ILoggedUser GetCurrentLoggedUser() {
+	public ILoggedUser GetCurrentUser() {
 		ParseUser currentUser = ParseUser.getCurrentUser();
 		ILoggedUser loggedUser = null;
 		
@@ -41,14 +43,14 @@ public class UserManager implements IUserManager{
 		loggedUser = new LoggedUser();
 		loggedUser.SetId(currentUser.getObjectId());
 		loggedUser.SetName(currentUser.getUsername());
-		loggedUser.SetEmail(currentUser.getEmail());
+		loggedUser.SetUserEmail(currentUser.getEmail());
 		}
 
 		return loggedUser;
 	}
 
 	@Override
-	public  void LogIn(String userName, String userPassword) {
+	public  void LogInUser(String userName, String userPassword, IUserLoginCallback loginCallback) {
 
 
 			// Login
@@ -61,29 +63,25 @@ public class UserManager implements IUserManager{
 					if (e == null) {
 						// Success!
 						
-						ILoggedUser userLogged = new LoggedUser();
-						userLogged.SetId(user.getObjectId());
-						userLogged.SetName(user.getUsername());
-						userLogged.SetEmail(user.getEmail());
 						Log.d(TAG, "User logged in.");
-						fireLoginResult(userLogged, LOGINRESULT.SUCCESS);
+						fireLoginResult(LOGINRESULT.SUCCESS);
 					}
 					else {
 						//Login - failed
-						LOGINRESULT exception;
+						LOGINRESULT loginResult;
 						switch (e.getCode()) {
 						case 201 | 200: // hope this condition will work
-							exception = LOGINRESULT.BADPASSWORD;
+							loginResult = LOGINRESULT.BADPASSWORD;
 							break;
 						case 205 | 207: 
-							exception = LOGINRESULT.NOTEXIST;
+							loginResult = LOGINRESULT.NOTEXIST;
 							break;
 						default:
-							exception = LOGINRESULT.UNDEFINED;
+							loginResult = LOGINRESULT.UNDEFINED;
 							break;
 						}
 						Log.d(TAG, "User login fail. Error: " + e);
-						fireLoginResult(null, exception); 
+						fireLoginResult(loginResult); 
 					}
 				}
 			});
@@ -91,14 +89,14 @@ public class UserManager implements IUserManager{
 
 
 	@Override
-	public void LogOff(ILoggedUser user) {
+	public void LogOffUser(ILoggedUser user) {
 		ParseUser.logOut();
 	}
 	
 	
 	
 	@Override
-	public void RegisterUser(String userName,String userPassword, String userEmail) {
+	public void RegisterUser(String userName,String userPassword, String userEmail, IUserRegisterCallback registerCallback) {
 		
 
 			// create the new user!
@@ -114,28 +112,23 @@ public class UserManager implements IUserManager{
 					
 					if (e == null) {
 						// Success!
-						IUser user = new User();
-						user.SetId(newUser.getObjectId());
-						user.SetName(newUser.getUsername());
-						user.SetEmail(newUser.getEmail());
-						Log.d(TAG, "New user registered");
-						fireRegisterResult(user, REGISTERRESULT.SUCCESS);
+						fireRegisterResult(REGISTERRESULT.SUCCESS);
 					}
 					else {
-						REGISTERRESULT exception;
+						REGISTERRESULT registerResult;
 						switch (e.getCode()) {
 						case 202:
-							exception = REGISTERRESULT.USEREXISTS;
+							registerResult = REGISTERRESULT.USEREXISTS;
 							break;
 						case 201:
-							exception = REGISTERRESULT.BADPASSWORD;
+							registerResult = REGISTERRESULT.BADPASSWORD;
 							break;
 						default:
-							exception = REGISTERRESULT.UNDEFINED;
+							registerResult = REGISTERRESULT.UNDEFINED;
 							break;
 						}
 						Log.d(TAG, "New user register fail. Error: " + e);
-						fireRegisterResult(null, exception);
+						fireRegisterResult(registerResult);
 					}
 				}
 			});
@@ -154,20 +147,12 @@ public class UserManager implements IUserManager{
 					User user = new User();
 					user.SetId(object.getObjectId());
 					user.SetName(object.getString(ParseConstants.KEY_USERNAME));
-					user.SetEmail(object.getString(ParseConstants.KEY_EMAIL));
-
 				}
 			}
 		});
 	}
 
-	@Override
-	public void initializeParse(Context context) {
-		Intent intent = new Intent(context, ParseInitialize.class); // не уверен, сработатет ли отсюда. Но запустить все равное необходимо.
-		context.startActivity(intent);
-	}
 
-	
 	
 	// --Listeners section--
 	private ArrayList<IUserRegisterListener> listenersRegister = new ArrayList<IUserRegisterListener>();
@@ -194,18 +179,15 @@ public class UserManager implements IUserManager{
 	}
 
 
-	private void fireRegisterResult(IUser user, REGISTERRESULT exception) {
-		IUserRegisterResult event = new UserRegisterEvent(user, exception);
-
-		for (IUserRegisterListener listener: listenersRegister)
-			listener.OnUserRegister(event);
+	private void fireRegisterResult(REGISTERRESULT registerResult) {
+		IUserLoginCallback callback = new UserLoginCallback();
+		callback.OnUserLogin(registerResult);
 	}
 	
-	private  void fireLoginResult(ILoggedUser user, LOGINRESULT exception) {
-		IUserLoginResult event = new UserLoginEvent(user, exception);
-
-		for (IUserLoginListener listener: listenersLogin)
-			listener.OnUserLogin(event);
+	private  void fireLoginResult(LOGINRESULT registerResult) {
+		IUserRegisterCallback callback = new UserRegisterCallback();
+		callback.OnUserRegister(registerResult);
+		
 	}
 
 }

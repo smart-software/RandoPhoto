@@ -6,7 +6,7 @@ import randojavalib.jar.Interfaces.IUser;
 public class User implements IUser {
 	private String mUserID;
 	private String mUsername;
-	private String mEmail;
+	
 	
 	
 	public String GetUID() {
@@ -24,9 +24,4 @@ public class User implements IUser {
 	public void SetId(String UserId) {
 		mUserID = UserId;
 	}
-	
-	public void SetEmail(String email){
-		mEmail = email;
-	}
-	
 }

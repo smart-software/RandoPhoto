@@ -28,10 +28,10 @@ public class Interfaces {
 		public String GetName(); //username - can be formed from letters (all cases) and digits
 		public void SetName(String userName); // Sets the name in IUser
 		public void SetId(String UserId); // Sets the id in IUser
-		public void SetEmail(String email); // Sets the email in IUser
 	}
 	public interface ILoggedUser extends IUser {
 		//the same as IUser, but different name
+		 void SetUserEmail(String email);// Sets the email
 	}
 	
     public enum LOGINRESULT { 
@@ -43,6 +43,11 @@ public class Interfaces {
         ILoggedUser GetLoggedUser(); // Returns null if login failed
     }
     
+    public interface IUserLoginCallback
+    {
+        void OnUserLogin(REGISTERRESULT registerResult);
+    }
+    
     public enum REGISTERRESULT { 
         SUCCESS, USEREXISTS, BADPASSWORD, EMPTYDATA,UNDEFINED //for IUserRegisterResult
     }
@@ -52,16 +57,20 @@ public class Interfaces {
        IUser GetRegisteredUser(); // null if Register failed
     }
     
+    public interface IUserRegisterCallback
+    {
+        void OnUserRegister(LOGINRESULT registerResult);
+    }
+    
     
 	public interface IUserManager {
 		
-	public void initializeParse(Context context); //Not necessary, depends on how Parse.initialize will be executed
-	public ILoggedUser GetCurrentLoggedUser(); //Returns current user by ParseUser.getCurrantUser (locally). Returns null if no logged user. - fast
+	public ILoggedUser GetCurrentUser(); //Returns current user by ParseUser.getCurrentUser (locally). Returns null if no logged user. - fast
 
-	public void LogIn(String userName, String userPassword); //Login registered user - background web task - ~1 sec
-	public void LogOff(ILoggedUser user); // Logoff current user - locally, web access optional - fast
+	public void LogInUser(String userName, String userPassword, IUserLoginCallback loginCallback); //Login registered user - background web task - ~1 sec
+	public void LogOffUser(ILoggedUser user); // Logoff current user - locally, web access optional - fast
 
-	public void RegisterUser(String userName, String userPassword, String userEmail); // Register user - web background task - ~1 sec
+	public void RegisterUser(String userName, String userPassword, String userEmail, IUserRegisterCallback registerCallback); // Register user - web background task - ~1 sec
 
 	public void GetUserByID(String ID); //Returns user by id (unique) - web background task - ~1 sec
 	
