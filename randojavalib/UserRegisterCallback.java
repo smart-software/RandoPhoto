@@ -1,13 +1,15 @@
 package randojavalib.jar;
 
-import randojavalib.jar.Interfaces.IUserRegisterCallback;
-import randojavalib.jar.Interfaces.LOGINRESULT;
+import randojavalib.jar.UserInterfaces.IUserRegisterCallback;
+import randojavalib.jar.UserInterfaces.IUserRegisterResult;
+
 
 public class UserRegisterCallback implements IUserRegisterCallback {
 
 
+
 	@Override
-	public void OnUserRegister(LOGINRESULT registerResult) {
+	public void OnUserRegister(IUserRegisterResult registerResult) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,27 +1,32 @@
 package randojavalib.jar;
 
-import randojavalib.jar.Interfaces.IUser;
 
 
-public class User implements IUser {
-	private String mUserID;
-	private String mUsername;
-	
-	
-	
-	public String GetUID() {
-		return mUserID;
+import randojavalib.jar.UserInterfaces.IUser;
+
+
+
+	public class User implements IUser {
+		private String m_userID;
+		private String m_userName;
+		
+		public User(String userID, String userName) {
+			m_userID = userID;
+			m_userName = userName;
+		}
+		
+		@Override
+		public String GetUID() {
+			return m_userID;
+		}
+		
+		@Override
+		public String GetUserName() {
+			return m_userName;
+		}
+		
+		@Override
+		public void SetUserName(String userName) {
+			m_userName = userName;
+		}
 	}
-	
-	public String GetName(){
-		return mUsername;
-	}
-	
-	public void SetName(String userName){
-		mUsername = userName;
-	}
-	
-	public void SetId(String UserId) {
-		mUserID = UserId;
-	}
-}

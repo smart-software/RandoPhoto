@@ -1,30 +1,26 @@
 package randojavalib.jar;
 
-import java.util.EventObject;
 
-import randojavalib.jar.Interfaces.ILoggedUser;
-import randojavalib.jar.Interfaces.IUserLoginResult;
-import randojavalib.jar.Interfaces.LOGINRESULT;
+import randojavalib.jar.UserInterfaces.ILoggedUser;
+import randojavalib.jar.UserInterfaces.IUserLoginResult;
+import randojavalib.jar.UserInterfaces.LOGINRESULT;
 
-public class UserLoginEvent extends EventObject implements IUserLoginResult {
-	
-	ILoggedUser user;
-	LOGINRESULT result;
+public class UserLoginEvent implements IUserLoginResult {
+	private ILoggedUser m_loggedUser;
+	private LOGINRESULT m_loginResult;
 
-	public UserLoginEvent(ILoggedUser user, LOGINRESULT result) {
-		super(user);
-		this.user = user;
-		this.result = result;
+	public UserLoginEvent(ILoggedUser loggedUser, LOGINRESULT loginResult) {
+		m_loggedUser = loggedUser;
+		m_loginResult = loginResult;
 	}
 
 	@Override
 	public LOGINRESULT GetUserLoginResult() {
-		return this.result;
+		return m_loginResult;
 	}
 
 	@Override
 	public ILoggedUser GetLoggedUser() {
-		return this.user;
+		return m_loggedUser;
 	}
-
 }

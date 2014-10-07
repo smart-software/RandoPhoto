@@ -1,31 +1,27 @@
 package randojavalib.jar;
 
-import java.util.EventObject;
+import randojavalib.jar.UserInterfaces.IUser;
+import randojavalib.jar.UserInterfaces.IUserRegisterResult;
+import randojavalib.jar.UserInterfaces.REGISTERRESULT;
 
-import randojavalib.jar.Interfaces.IUser;
-import randojavalib.jar.Interfaces.IUserRegisterResult;
-import randojavalib.jar.Interfaces.REGISTERRESULT;
 
-public class UserRegisterEvent extends EventObject implements IUserRegisterResult {
 
-	private IUser user;
-	REGISTERRESULT result;
+public class UserRegisterEvent implements IUserRegisterResult {
+	private IUser m_user;
+	private REGISTERRESULT m_registerResult;
 	
-	public UserRegisterEvent(IUser user, REGISTERRESULT result) {
-		super(user);
-		this.user = user;
-		this.result = result;
+	public UserRegisterEvent(IUser user, REGISTERRESULT registerResult) {
+		m_user = user;
+		m_registerResult = registerResult;
 	}
-	
 
 	@Override
 	public REGISTERRESULT GetUserRegisterResult() {
-		return this.result;
+		return m_registerResult;
 	}
 
 	@Override
 	public IUser GetRegisteredUser() {
-		return this.user;
+		return m_user;
 	}
-
 }
