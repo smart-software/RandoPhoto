@@ -10,6 +10,8 @@ import randojavalib.jar.UserInterfaces.IUserRegisterResult;
 import randojavalib.jar.UserInterfaces.LOGINRESULT;
 import randojavalib.jar.UserInterfaces.REGISTERRESULT;
 
+import android.util.Log;
+
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -39,7 +41,7 @@ public class UserManager implements IUserManager {
 			@Override
 			public void done(ParseUser user, ParseException e) {
 				IUserLoginResult loginResult = null;
-				
+				Log.d("logInBackGround Sucess", "ParseUser: "+ParseUser.getCurrentUser().getUsername());
 				if ((e == null) && (user != null)) {
 					ILoggedUser loggedUser = new LoggedUser(user.getObjectId(), user.getUsername(), user.getEmail());
 					loginResult = new UserLoginEvent(loggedUser, LOGINRESULT.SUCCESS);
@@ -51,7 +53,7 @@ public class UserManager implements IUserManager {
 				else { // Something wrong
 					LOGINRESULT loginRes = LOGINRESULT.UNDEFINED;
 					
-					switch (e.getCode()) {
+					switch (e.getCode()) { 
 					case 201:
 					case 200:
 						loginRes = LOGINRESULT.BADPASSWORD;
@@ -91,7 +93,7 @@ public class UserManager implements IUserManager {
 			@Override
 			public void done(ParseException e) {
 				IUserRegisterResult registerResult = null;
-				
+				Log.d("RegisterUser Sucess", "RegisteredUser: "+ParseUser.getCurrentUser().getUsername());
 				if (e == null) { // User signed up Successfully
 					IUser registerUser = new User(newUser.getObjectId(), newUser.getUsername());
 					registerResult = new UserRegisterEvent(registerUser, REGISTERRESULT.SUCCESS);
