@@ -63,11 +63,9 @@ namespace RandoPhoto
             
             public const int btnRegister = 0x7f05003c;
             
-            public const int etNickname = 0x7f05003d;
+            public const int lNickname = 0x7f05003d;
             
-            public const int lNickname = 0x7f05003e;
-            
-            public const int btnPassword = 0x7f05003f;
+            public const int etNickname = 0x7f05003e;
         }
         
         public sealed class Strings
@@ -77,17 +75,19 @@ namespace RandoPhoto
             
             public const int email_text = 0x7f060001;
             
-            public const int password_text = 0x7f060002;
+            public const int nickname_text = 0x7f060002;
             
-            public const int login_text = 0x7f060003;
+            public const int password_text = 0x7f060003;
             
-            public const int register_text = 0x7f060004;
+            public const int login_text = 0x7f060004;
             
-            public const int login_error_underfined_text = 0x7f060005;
+            public const int register_text = 0x7f060005;
             
-            public const int login_error_notexist_text = 0x7f060006;
+            public const int login_error_underfined_text = 0x7f060006;
             
-            public const int login_error_badpassword_text = 0x7f060007;
+            public const int login_error_notexist_text = 0x7f060007;
+            
+            public const int login_error_badpassword_text = 0x7f060008;
         }
     }
 }

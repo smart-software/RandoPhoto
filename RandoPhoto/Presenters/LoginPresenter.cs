@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
+using Com.Rando.Library;
 using RandoPhoto.Views;
-using RandoPhoto.Models.UserModel;
 
 namespace RandoPhoto.Presenters
 {
-    public class LoginPresenter : IBasePresenter
+    public class LoginPresenter : IBasePresenter, UserInterfaces.IUserLoginCallback
     {
         private ILoginView m_loginView;
 
@@ -35,33 +36,27 @@ namespace RandoPhoto.Presenters
             viewManager.ShowView<IRegisterView, RegisterPresenter>();
         }
 
-        void OnLoginUserClick(object sender, LoginEventArgs e)
+        public void OnLoginUserClick(object sender, LoginEventArgs e)
         {
-            IUserManager userManager = Program.Container.Resolve(typeof(IUserManager)) as IUserManager;
-            userManager.LogIn(e.UserName, e.UserPassword, this.OnUserLogin);
+            UserInterfaces.IUserManager userManager = Program.Container.Resolve(typeof(UserInterfaces.IUserManager))
+                as UserInterfaces.IUserManager;
+            userManager.LogInUser(e.UserName, e.UserPassword, this);
         }
 
-        void OnUserLogin(IUserLoginResult loginResult)
+        public void OnUserLogin(UserInterfaces.IUserLoginResult loginResult)
         {
-            if (loginResult.LoginResult == LOGINRESULT.SUCCESS)
+            UserInterfaces.LOGINRESULT logRes = loginResult.GetUserLoginResult();
+
+            if (logRes == UserInterfaces.LOGINRESULT.SUCCESS)
             {
                 IViewManager viewManager = Program.Container.Resolve(typeof(IViewManager)) as IViewManager;
                 viewManager.ShowView<IMainView, MainPresenter>(false);
             }
             else
             {
-                switch (loginResult.LoginResult)
-                {
-                    case LOGINRESULT.BADPASSWORD:
-                        m_loginView.ShowLoginError(LOGINERROR.BADPASSWORD);
-                        break;
-                    case LOGINRESULT.NOTEXIST:
-                        m_loginView.ShowLoginError(LOGINERROR.NOTEXIST);
-                        break;
-                    default:
-                        m_loginView.ShowLoginError(LOGINERROR.UNDERFINED);
-                        break;
-                }
+                if (logRes == UserInterfaces.LOGINRESULT.BADPASSWORD) m_loginView.ShowLoginError(LOGINERROR.BADPASSWORD);
+                else if (logRes == UserInterfaces.LOGINRESULT.NOTEXIST) m_loginView.ShowLoginError(LOGINERROR.NOTEXIST);
+                else m_loginView.ShowLoginError(LOGINERROR.UNDERFINED);
             }
         }
     }

@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
+using Com.Rando.Library;
 using RandoPhoto.Presenters;
 using RandoPhoto.Views;
-using RandoPhoto.Models.UserModel;
+
 
 namespace RandoPhoto.Presenters
 {
@@ -20,8 +22,9 @@ namespace RandoPhoto.Presenters
 
         public void OnCreateView(object sender, EventArgs e)
         {
-            IUserManager userManager = (IUserManager)Program.Container.Resolve(typeof(IUserManager));
-            ILoggedUser loggedUser = userManager.GetCurrentUser();
+            UserInterfaces.IUserManager userManager = Program.Container.Resolve(typeof(UserInterfaces.IUserManager))
+                as UserInterfaces.IUserManager;
+            UserInterfaces.ILoggedUser loggedUser = userManager.GetCurrentUser();
 
             if (loggedUser != null)
             {

@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using Android.App;
 using Android.Util;
 using Dot42.Manifest;
+
 using SimpleIOC;
-using RandoPhoto.Models;
-using RandoPhoto.Models.UserModel;
+using Com.Rando.Library;
 using RandoPhoto.Views;
 using RandoPhoto.Presenters;
+
+[assembly: UsesPermission(Android.Manifest.Permission.INTERNET)]
+[assembly: UsesPermission(Android.Manifest.Permission.ACCESS_NETWORK_STATE)]
+[assembly: UsesPermission(Android.Manifest.Permission.WRITE_EXTERNAL_STORAGE)]
 
 namespace RandoPhoto
 {
@@ -16,13 +20,21 @@ namespace RandoPhoto
     {
         public static CSimpleIoCContainer Container { get; private set; }
 
+        public override void OnCreate()
+        {
+            base.OnCreate();
+
+            LibManager.InitializeLibrary(this);
+            Bootstrap();
+        }
+
         private void Bootstrap()
         {
             // Create IoC Container
             Program.Container = new CSimpleIoCContainer();
 
             // Regster UserManager
-            Program.Container.Register<IUserManager, UserManager>(null);
+            Program.Container.Register<UserInterfaces.IUserManager, UserManager>(null);
 
             // Register ViewManager
             Program.Container.Register<IViewManager, ViewManager>(null);
@@ -45,14 +57,6 @@ namespace RandoPhoto
             {
                 typeof(IRegisterView)
             });
-        }
-
-        public override void OnCreate()
-        {
-            base.OnCreate();
-
-            Bootstrap();
-            RandoLibraryManager.InitializeLibrary(this);
         }
 
         public override void OnConfigurationChanged(Android.Content.Res.Configuration newConfig)

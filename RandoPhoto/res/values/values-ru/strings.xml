@@ -1,6 +1,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
   <string name="app_name">RandoPhoto</string>
   <string name="email_text">Email:</string>
+  <string name="nickname_text">Никнейм:</string>
   <string name="password_text">Пароль:</string>
   <string name="login_text">Вход</string>
   <string name="register_text">Регистрация</string>
