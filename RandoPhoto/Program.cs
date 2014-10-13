@@ -7,7 +7,9 @@ using Dot42.Manifest;
 using SimpleIOC;
 using Com.Rando.Library;
 using RandoPhoto.Views;
+using RandoPhoto.Views.TabsActivity;
 using RandoPhoto.Presenters;
+using RandoPhoto.Presenters.TabPresenters;
 
 [assembly: UsesPermission(Android.Manifest.Permission.INTERNET)]
 [assembly: UsesPermission(Android.Manifest.Permission.ACCESS_NETWORK_STATE)]
@@ -44,6 +46,9 @@ namespace RandoPhoto
             Program.Container.Register<ILoginView, LoginActivity>(null);
             Program.Container.Register<IRegisterView, RegisterActivity>(null);
 
+            // Register tab views interfaces
+            Program.Container.Register<IMyRandoTabView, MyRandoTabView>(null);
+
             // Register presenter interfaces (LifeCycle.Transient)
             Program.Container.Register<MainPresenter, MainPresenter>(LifeCycle.Transient, new List<Type>() 
             {
@@ -56,6 +61,10 @@ namespace RandoPhoto
             Program.Container.Register<RegisterPresenter, RegisterPresenter>(LifeCycle.Transient, new List<Type>()
             {
                 typeof(IRegisterView)
+            });
+            Program.Container.Register<MyRandoTabPresenter, MyRandoTabPresenter>(new List<Type>()
+            {
+                typeof(IMyRandoTabView)
             });
         }
 

@@ -21,8 +21,8 @@ namespace RandoPhoto.Presenters
         {
             m_loginView = dependencyList[typeof(ILoginView)] as ILoginView;
             m_loginView.OnCreateViewEvent += OnCreateView;
-            m_loginView.OnLoginUserClick += OnLoginUserClick;
-            m_loginView.OnRegisterUserClick += OnRegisterUserClick;
+            m_loginView.OnUserLoginClick += OnLoginUserClick;
+            m_loginView.OnUserRegisterClick += OnRegisterUserClick;
         }
 
         public void OnCreateView(object sender, EventArgs e)

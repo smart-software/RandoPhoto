@@ -11,8 +11,13 @@ namespace RandoPhoto.Views
         event EventHandler<EventArgs> OnCreateViewEvent;
     }
 
+    public interface ITabView : IBaseView
+    {
+    }
+
     interface IMainView : IBaseView
     {
+        event EventHandler<EventArgs> OnUserSettingsClick;
     }
 
     public class LoginEventArgs : EventArgs
@@ -30,8 +35,8 @@ namespace RandoPhoto.Views
     {
         void ShowLoginError(LOGINERROR loginError);
 
-        event EventHandler<LoginEventArgs> OnLoginUserClick;
-        event EventHandler<EventArgs> OnRegisterUserClick;
+        event EventHandler<LoginEventArgs> OnUserLoginClick;
+        event EventHandler<EventArgs> OnUserRegisterClick;
     }
 
     public class RegisterEventArgs : EventArgs
@@ -51,5 +56,9 @@ namespace RandoPhoto.Views
         void ShowRegisterError(REGISTERERROR registerError);
 
         event EventHandler<RegisterEventArgs> OnRegisterUserClick;
+    }
+
+    interface IMyRandoTabView : ITabView
+    {
     }
 }

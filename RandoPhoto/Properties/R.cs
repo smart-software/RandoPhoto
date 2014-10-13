@@ -29,7 +29,13 @@ namespace RandoPhoto
             
             public const int main_view = 0x7f030001;
             
-            public const int register_view = 0x7f030002;
+            public const int my_rando_view = 0x7f030002;
+            
+            public const int rando_message_view = 0x7f030003;
+            
+            public const int register_view = 0x7f030004;
+            
+            public const int top_randos_view = 0x7f030005;
         }
         
         public sealed class Colors
@@ -51,9 +57,9 @@ namespace RandoPhoto
             
             public const int ivLogo = 0x7f050036;
             
-            public const int lEmail = 0x7f050037;
+            public const int lNickname = 0x7f050037;
             
-            public const int etEmail = 0x7f050038;
+            public const int etNickname = 0x7f050038;
             
             public const int lPassword = 0x7f050039;
             
@@ -63,9 +69,13 @@ namespace RandoPhoto
             
             public const int btnRegister = 0x7f05003c;
             
-            public const int lNickname = 0x7f05003d;
+            public const int btnPhoto = 0x7f05003d;
             
-            public const int etNickname = 0x7f05003e;
+            public const int btnSettings = 0x7f05003e;
+            
+            public const int lEmail = 0x7f05003f;
+            
+            public const int etEmail = 0x7f050040;
         }
         
         public sealed class Strings
@@ -88,6 +98,8 @@ namespace RandoPhoto
             public const int login_error_notexist_text = 0x7f060007;
             
             public const int login_error_badpassword_text = 0x7f060008;
+            
+            public const int my_rando_tab_text = 0x7f060009;
         }
     }
 }

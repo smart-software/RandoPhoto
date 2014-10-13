@@ -34,7 +34,7 @@ namespace RandoPhoto.Presenters
         {
             UserInterfaces.IUserManager userManager = Program.Container.Resolve(typeof(UserInterfaces.IUserManager))
                 as UserInterfaces.IUserManager;
-            userManager.RegisterUser(e.UserEmail, e.UserName, e.UserPassword, this);
+            userManager.RegisterUser(e.UserName, e.UserPassword, e.UserEmail, this);
         }
 
         public void OnUserRegister(UserInterfaces.IUserRegisterResult userRegisterResult)

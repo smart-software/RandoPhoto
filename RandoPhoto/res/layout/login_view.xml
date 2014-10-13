@@ -30,33 +30,33 @@
         android:layout_weight="1.5"/>
   </LinearLayout>
 
-  <!-- Email text edit -->
+  <!-- Nickname text edit -->
   <TextView
-    android:id="@+id/lEmail"
+    android:id="@+id/lNickname"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_below="@+id/logolayout"
-    android:layout_alignLeft="@+id/etEmail"
+    android:layout_alignLeft="@+id/etNickname"
     android:layout_marginTop="10dp"
-    android:text="@string/email_text"/>
+    android:text="@string/nickname_text"/>
   <EditText
-    android:id="@+id/etEmail"
+    android:id="@+id/etNickname"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_below="@+id/lEmail"
+    android:layout_below="@+id/lNickname"
     android:layout_centerHorizontal="true"
     android:ems="10">
     <requestFocus />
   </EditText>
-  <!-- End of email text edit -->
+  <!-- End of Nickname text edit -->
 
   <!-- Password text edit -->
   <TextView
     android:id="@+id/lPassword"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_below="@+id/etEmail"
-    android:layout_alignLeft="@+id/lEmail"
+    android:layout_below="@+id/etNickname"
+    android:layout_alignLeft="@+id/etNickname"
     android:layout_marginTop="3dp"
     android:text="@string/password_text" />
   <EditText
@@ -64,7 +64,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_below="@+id/lPassword"
-    android:layout_alignLeft="@+id/lEmail"
+    android:layout_alignLeft="@+id/etNickname"
     android:ems="10" />
   <!-- End of password text edit -->
 
@@ -74,8 +74,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_below="@+id/etPassword"
-    android:layout_alignLeft="@+id/etEmail"
-    android:layout_alignRight="@+id/etEmail"
+    android:layout_alignLeft="@+id/etNickname"
+    android:layout_alignRight="@+id/etNickname"
     android:layout_marginTop="10dp"
     android:text="@string/login_text" />
   <Button
@@ -83,8 +83,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_below="@+id/btnLogin"
-    android:layout_alignLeft="@+id/etEmail"
-    android:layout_alignRight="@+id/etEmail"
+    android:layout_alignLeft="@+id/etNickname"
+    android:layout_alignRight="@+id/etNickname"
     android:layout_marginTop="5dp"
     android:text="@string/register_text" />
   <!-- End of Buttons -->

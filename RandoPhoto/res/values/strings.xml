@@ -8,4 +8,5 @@
   <string name="login_error_underfined_text">Underfined error</string>
   <string name="login_error_notexist_text">User does not exist</string>
   <string name="login_error_badpassword_text">Bad password</string>
+  <string name="my_rando_tab_text">My Rando</string>
 </resources>

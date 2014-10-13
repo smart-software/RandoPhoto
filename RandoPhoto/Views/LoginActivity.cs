@@ -41,7 +41,7 @@ namespace RandoPhoto.Views
         {
             SetContentView(R.Layouts.login_view);
             
-            m_etLogin = FindViewById<EditText>(R.Ids.etEmail);
+            m_etLogin = FindViewById<EditText>(R.Ids.etNickname);
             m_etPassword = FindViewById<EditText>(R.Ids.etPassword);
             
             m_btnLogin = FindViewById<Button>(R.Ids.btnLogin);
@@ -57,14 +57,14 @@ namespace RandoPhoto.Views
                 }
                 else
                 {
-                    if (this.OnLoginUserClick != null) this.OnLoginUserClick(this, loginArgs);
+                    if (this.OnUserLoginClick != null) this.OnUserLoginClick(this, loginArgs);
                 }
             };
 
             m_btnRegister = FindViewById<Button>(R.Ids.btnRegister);
             m_btnRegister.Click += (sender, args) =>
             {
-                if (this.OnRegisterUserClick != null) this.OnRegisterUserClick(this, EventArgs.Empty);
+                if (this.OnUserRegisterClick != null) this.OnUserRegisterClick(this, EventArgs.Empty);
             };
         }
 
@@ -90,7 +90,7 @@ namespace RandoPhoto.Views
         }
 
         public event EventHandler<EventArgs> OnCreateViewEvent;
-        public event EventHandler<LoginEventArgs> OnLoginUserClick;
-        public event EventHandler<EventArgs> OnRegisterUserClick;
+        public event EventHandler<LoginEventArgs> OnUserLoginClick;
+        public event EventHandler<EventArgs> OnUserRegisterClick;
     }
 }
