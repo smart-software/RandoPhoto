@@ -5,6 +5,7 @@ using System.Text;
 using Android;
 using Android.App;
 using Android.Content;
+using Android.Widget;
 using RandoPhoto.Presenters;
 
 namespace RandoPhoto.Views
@@ -14,6 +15,11 @@ namespace RandoPhoto.Views
         void ShowView<TView, TPresenter>(bool CanGoBack = true)
             where TView : class, IBaseView
             where TPresenter : class, new();
+        void AddTabView<TView, TPresenter>(string headerName)
+            where TView : class, ITabView
+            where TPresenter : class, new();
+
+        string GetStringResource(int resourceID);
 
         IBaseView CurrentView { get; set; }
     }
@@ -41,6 +47,29 @@ namespace RandoPhoto.Views
                 }
                 currentActivity.StartActivity(intent);
             }
+        }
+
+        public void AddTabView<TView, TPresenter>(string headerName)
+            where TView : class, ITabView
+            where TPresenter : class, new()
+        {
+            Activity currActivity = this.CurrentView as Activity;
+            TabHost tabHost = currActivity.FindViewById<TabHost>(Android.R.Id.Tabhost);
+            Type viewType = Program.Container.GetConcreteType(typeof(TView));
+
+            if ((tabHost != null) && (viewType != null))
+            {
+                TabHost.TabSpec tabSpec = tabHost.NewTabSpec(viewType.Name);
+                tabSpec.SetIndicator(headerName);
+                tabSpec.SetContent(new Intent(currActivity, viewType));
+                tabHost.AddTab(tabSpec);
+            }
+        }
+
+        public string GetStringResource(int resourceID)
+        {
+            Activity currActivity = this.CurrentView as Activity;
+            return currActivity.GetResources().GetString(resourceID);
         }
 
         public IBaseView CurrentView { get; set; }

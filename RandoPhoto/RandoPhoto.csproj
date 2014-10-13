@@ -58,13 +58,20 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Presenters\RegisterPresenter.cs" />
     <Compile Include="Presenters\LoginPresenter.cs" />
     <Compile Include="Presenters\MainPresenter.cs" />
+    <Compile Include="Presenters\TabPresenters\MyRandoTabPresenter.cs" />
+    <Compile Include="Presenters\TabPresenters\RandoMessageTabPresenter.cs" />
+    <Compile Include="Presenters\TabPresenters\TopRandosTabPresenter.cs" />
     <Compile Include="Presenters\_PresenterInterfaces.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="Stubs\UserModelStub.cs" />
+    <Compile Include="Views\RegisterActivity.cs" />
     <Compile Include="Views\LoginActivity.cs" />
     <Compile Include="Views\MainActivity.cs" />
+    <Compile Include="Views\TabsActivity\TopRandosTab.cs" />
+    <Compile Include="Views\TabsActivity\RandoMessageTab.cs" />
+    <Compile Include="Views\TabsActivity\MyRandoTabView.cs" />
     <Compile Include="Views\_ViewInterfaces.cs" />
     <Compile Include="Views\ViewManager.cs" />
   </ItemGroup>
@@ -80,16 +87,36 @@
     <DrawableResource Include="res\drawable-ldpi\ic_launcher.png" />
     <DrawableResource Include="res\drawable-mdpi\ic_launcher.png" />
     <DrawableResource Include="res\drawable-xhdpi\ic_launcher.png" />
-    <LayoutResource Include="res\layout\login_view.xml" />
+    <LayoutResource Include="res\layout\login_view.xml">
+      <SubType>Designer</SubType>
+    </LayoutResource>
     <LayoutResource Include="res\layout\main_view.xml" />
     <LayoutResource Include="res\layout\register_view.xml" />
     <ValuesResource Include="res\values\colors.xml" />
-    <ValuesResource Include="res\values\strings.xml" />
+    <ValuesResource Include="res\values\strings.xml">
+      <SubType>Designer</SubType>
+    </ValuesResource>
     <ValuesResource Include="res\values\styles.xml" />
-    <ValuesResource Include="res\values\values-ru\strings.xml" />
+    <ValuesResource Include="res\values\values-ru\strings.xml">
+      <SubType>Designer</SubType>
+    </ValuesResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\" />
+    <Folder Include="Stubs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <JarReference Include="D:\Work\GIT\RandoPhoto\RandoPhoto\References\RandoLib.jar">
+      <ImportCode>yes</ImportCode>
+    </JarReference>
+  </ItemGroup>
+  <ItemGroup>
+    <LayoutResource Include="res\layout\tabs\my_rando_view.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <LayoutResource Include="res\layout\tabs\top_randos_view.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <LayoutResource Include="res\layout\tabs\rando_message_view.xml" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

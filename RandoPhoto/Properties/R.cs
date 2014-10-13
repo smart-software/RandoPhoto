@@ -29,7 +29,13 @@ namespace RandoPhoto
             
             public const int main_view = 0x7f030001;
             
-            public const int register_view = 0x7f030002;
+            public const int my_rando_view = 0x7f030002;
+            
+            public const int rando_message_view = 0x7f030003;
+            
+            public const int register_view = 0x7f030004;
+            
+            public const int top_randos_view = 0x7f030005;
         }
         
         public sealed class Colors
@@ -47,25 +53,29 @@ namespace RandoPhoto
         public sealed class Ids
         {
             
-            public const int ivLogo = 0x7f050035;
+            public const int logolayout = 0x7f050035;
             
-            public const int lEmail = 0x7f050036;
+            public const int ivLogo = 0x7f050036;
             
-            public const int etEmail = 0x7f050037;
+            public const int lNickname = 0x7f050037;
             
-            public const int lPassword = 0x7f050038;
+            public const int etNickname = 0x7f050038;
             
-            public const int etPassword = 0x7f050039;
+            public const int lPassword = 0x7f050039;
             
-            public const int btnLogin = 0x7f05003a;
+            public const int etPassword = 0x7f05003a;
             
-            public const int btnRegister = 0x7f05003b;
+            public const int btnLogin = 0x7f05003b;
             
-            public const int lNickname = 0x7f05003c;
+            public const int btnRegister = 0x7f05003c;
             
-            public const int etNickname = 0x7f05003d;
+            public const int btnPhoto = 0x7f05003d;
             
-            public const int btnPassword = 0x7f05003e;
+            public const int btnSettings = 0x7f05003e;
+            
+            public const int lEmail = 0x7f05003f;
+            
+            public const int etEmail = 0x7f050040;
         }
         
         public sealed class Strings
@@ -75,11 +85,21 @@ namespace RandoPhoto
             
             public const int email_text = 0x7f060001;
             
-            public const int password_text = 0x7f060002;
+            public const int nickname_text = 0x7f060002;
             
-            public const int login_text = 0x7f060003;
+            public const int password_text = 0x7f060003;
             
-            public const int register_text = 0x7f060004;
+            public const int login_text = 0x7f060004;
+            
+            public const int register_text = 0x7f060005;
+            
+            public const int login_error_underfined_text = 0x7f060006;
+            
+            public const int login_error_notexist_text = 0x7f060007;
+            
+            public const int login_error_badpassword_text = 0x7f060008;
+            
+            public const int my_rando_tab_text = 0x7f060009;
         }
     }
 }

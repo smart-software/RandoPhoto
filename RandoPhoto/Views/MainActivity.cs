@@ -13,9 +13,13 @@ namespace RandoPhoto
     [Activity]
     public class MainActivity : Activity, IMainView
     {
+        private ImageButton m_btnUserSettings;
+
         public MainActivity() 
             : base()
         {
+            m_btnUserSettings = null;
+
             Program.Container.ResolveToObject<IMainView, MainActivity>(this);
             Program.Container.Resolve(typeof(MainPresenter));
         }
@@ -27,14 +31,24 @@ namespace RandoPhoto
             IViewManager viewManager = Program.Container.Resolve(typeof(IViewManager)) as IViewManager;
             viewManager.CurrentView = this;
 
-            if (this.OnCreateView != null) this.OnCreateView(this, new EventArgs());
+            if (this.OnCreateViewEvent != null) this.OnCreateViewEvent(this, new EventArgs());
         }
 
         public void SetContent()
         {
             SetContentView(R.Layouts.main_view);
+
+            TabHost tabHost = FindViewById<TabHost>(Android.R.Id.Tabhost);
+            tabHost.Setup();
+
+            m_btnUserSettings = FindViewById<ImageButton>(R.Ids.btnSettings);
+            m_btnUserSettings.Click += (sender, args) =>
+            {
+                if (this.OnUserSettingsClick != null) this.OnUserSettingsClick(this, EventArgs.Empty);
+            };
         }
 
-        public new event EventHandler<EventArgs> OnCreateView;
+        public event EventHandler<EventArgs> OnCreateViewEvent;
+        public event EventHandler<EventArgs> OnUserSettingsClick;
     }
 }
