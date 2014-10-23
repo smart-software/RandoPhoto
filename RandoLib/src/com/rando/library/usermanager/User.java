@@ -9,7 +9,7 @@ import java.io.File;
 public class User implements UserInterfaces.IUser {
     private String m_userID;
     private String m_userName;
-    private File m_avatar;
+    private File m_avatar = null;
     private String m_avatar_url;
 
     public User(String userID, String userName) {
@@ -47,12 +47,20 @@ public class User implements UserInterfaces.IUser {
 	@Override
 	public String GetAvatarUrl() {
 		// TODO Auto-generated method stub
-		return null;
+		return m_avatar_url;
 	}
 
 	@Override
 	public File GetAvatar() {
-		// TODO Auto-generated method stub
-		return null;
+		return m_avatar;
+	}
+
+	@Override
+	public boolean HasAvatarFile() {
+		boolean hasAvatarFile = false;
+		if(m_avatar !=null){
+			hasAvatarFile = true;
+		}
+		return hasAvatarFile;
 	}
 }
