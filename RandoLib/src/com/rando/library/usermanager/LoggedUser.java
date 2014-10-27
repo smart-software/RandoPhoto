@@ -34,9 +34,4 @@ public class LoggedUser extends User implements UserInterfaces.ILoggedUser {
         m_userEmail = userEmail;
     }
 
-    @Override
-    public String GetTotalRandos() { return "0"; }
-
-    @Override
-    public  String GetTotalLikes() { return "0"; }
 }

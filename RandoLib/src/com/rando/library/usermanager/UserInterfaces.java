@@ -16,13 +16,14 @@ public class UserInterfaces {
 
         public String GetUserName(); // Username - can be formed from letters (all cases) and digits
         public void SetUserName(String userName); // Sets the name in IUser
-        public String GetAvatarUrl(); // GetAvatar
+        public String GetAvatarUrl(); // GetAvatar url 
         public File GetAvatar(); // GetAvatar
+        boolean HasAvatarFile(); // returns true if there is cached file of avatar
+        public void GetTotalRandos(final IGetTotalRandosCallback getTotalRandosCallback); //
+        public  void GetTotalLikes(final IGetTotaLikesCallback getTotalLikesResult); //
     }
 
     public interface ILoggedUser extends IUser {
-        String GetTotalRandos(); //TODO
-        String GetTotalLikes(); //TODO
         String GetUserEmail();
         void SetUserEmail(String userEmail);// Sets the email
     }
@@ -59,6 +60,24 @@ public class UserInterfaces {
      
     public interface IUserSaveCallback{
     	void OnUserSave(IUserSaveResult saveResult); //implement for callback purposes
+    }
+    
+    public interface IGetTotalRandosResult {
+    	int GetTotalRandos();
+    	GENERALERROR getTotalRandosResult();	
+    }
+    
+    public interface IGetTotalRandosCallback {
+    	void OnGetTotalRandos(IGetTotalRandosResult getTotalRandosResult);
+    }
+    
+    public interface IGetTotalLikesResult {
+    	int GetTotalLikes();
+    	GENERALERROR getTotalRandosResult();	
+    }
+    
+    public interface IGetTotaLikesCallback {
+    	void OnGetTotalRandos(IGetTotalLikesResult getTotalLikesResult);
     }
 
     public interface IUserManager {

@@ -1,12 +1,26 @@
 package com.rando.library.usermanager;
 
 import java.io.File;
+import java.util.List;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.rando.library.LibManager;
+import com.rando.library.LibManager.GENERALERROR;
+import com.rando.library.ParseConstants;
+import com.rando.library.usermanager.UserInterfaces.IGetTotaLikesCallback;
+import com.rando.library.usermanager.UserInterfaces.IGetTotalLikesResult;
+import com.rando.library.usermanager.UserInterfaces.IGetTotalRandosCallback;
+import com.rando.library.usermanager.UserInterfaces.IGetTotalRandosResult;
+import com.rando.library.usermanager.UserInterfaces.IUser;
 
 /**
  * Created by SERGant on 11.10.2014.
  */
 
-public class User implements UserInterfaces.IUser {
+public class User implements IUser {
     private String m_userID;
     private String m_userName;
     private File m_avatar = null;
@@ -17,7 +31,7 @@ public class User implements UserInterfaces.IUser {
         m_userName = userName;
     }
 
-    public User(String userID, String userName, File avatar) {
+    public User(String userID, String userName,  File avatar) {
         m_userID = userID;
         m_userName = userName;
         m_avatar = avatar;
@@ -28,6 +42,8 @@ public class User implements UserInterfaces.IUser {
         m_userName = userName;
         m_avatar_url = avatarUrl;
     }
+    
+    
 
     @Override
     public String GetUID() {
@@ -46,7 +62,6 @@ public class User implements UserInterfaces.IUser {
 
 	@Override
 	public String GetAvatarUrl() {
-		// TODO Auto-generated method stub
 		return m_avatar_url;
 	}
 
@@ -63,4 +78,55 @@ public class User implements UserInterfaces.IUser {
 		}
 		return hasAvatarFile;
 	}
+
+	@Override
+	public void GetTotalRandos(final IGetTotalRandosCallback getTotalRandosCallback) {
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_PHOTO);
+		query.whereEqualTo(ParseConstants.KEY_CREATED_BY, m_userID);
+		query.whereExists(ParseConstants.KEY_LIKES_ID);
+		query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
+		query.findInBackground(new FindCallback<ParseObject>() {
+			@Override
+			public void done(List<ParseObject> listTotalRandos, ParseException e) {
+				IGetTotalRandosResult getTotalRandosResult;
+				
+				if (e== null) {
+					int totalRandos = listTotalRandos.size();
+					getTotalRandosResult = new GetTotalRandosResult(totalRandos, GENERALERROR.SUCCESS);
+				}
+				else {
+					getTotalRandosResult = new GetTotalRandosResult(LibManager.decodeError(e.getCode()));
+				}
+				if(getTotalRandosCallback!=null) {getTotalRandosCallback.OnGetTotalRandos(getTotalRandosResult);};
+			}
+		});
+	}
+
+	@Override
+	public void GetTotalLikes(final IGetTotaLikesCallback getTotalLikesCallback) {
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_PHOTO);
+		query.whereEqualTo(ParseConstants.KEY_CREATED_BY, m_userID);
+		query.whereExists(ParseConstants.KEY_LIKES_ID);
+		query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
+		query.findInBackground(new FindCallback<ParseObject>() {
+			@Override
+			public void done(List<ParseObject> listTotalRandos, ParseException e) {
+				IGetTotalLikesResult getTotalLikesResult;
+				
+				if (e== null) {
+					int totalRandos = 0;
+					for (ParseObject photo : listTotalRandos) {
+						totalRandos = totalRandos + photo.getList(ParseConstants.KEY_LIKES_ID).size();	
+					}
+					getTotalLikesResult = new GetTotalLikesResult(totalRandos, GENERALERROR.SUCCESS);
+				}
+				else {
+					getTotalLikesResult = new GetTotalLikesResult(LibManager.decodeError(e.getCode()));
+				}
+				if(getTotalLikesCallback!=null) {getTotalLikesCallback.OnGetTotalRandos(getTotalLikesResult);};
+			}
+		});
+	}
+	
+	
 }
