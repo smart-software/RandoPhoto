@@ -11,19 +11,22 @@ public class Comment implements IComment{
 	private String mParentId;
 	private String mCommentString;
 	private String mLocale;
+	private String mCreatedBy;
 	
-	public Comment(String parentId, String commentString, String locale){
+	public Comment(String parentId, String createdBy,String commentString, String locale){
 		mParentId = parentId;
 		mCommentString = commentString;
 		mLocale = locale;
+		mCreatedBy = createdBy;
 	}
 	
-	public Comment(String id, Date createdAt, String parentId, String commentString, String locale){
+	public Comment(String id, Date createdAt, String parentId, String createdBy,String commentString, String locale){
 		mId = id;
 		mCreatedAt = createdAt;
 		mParentId = parentId;
 		mCommentString = commentString;
 		mLocale = locale;
+		mCreatedBy = createdBy;
 	}
 
 	@Override
@@ -49,6 +52,11 @@ public class Comment implements IComment{
 	@Override
 	public String GetLocale() {
 		return mLocale;
+	}
+
+	@Override
+	public String GetCreatedBy() {
+		return mCreatedBy;
 	}
 
 }

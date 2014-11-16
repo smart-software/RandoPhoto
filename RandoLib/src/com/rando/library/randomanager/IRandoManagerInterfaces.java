@@ -46,6 +46,7 @@ public interface IComment {
 	public String GetParentId(); //returns parent id. Parent = commented photo
 	public String GetCommentString(); //returns actual comment
 	public String GetLocale(); // Locale in string format
+	public String GetCreatedBy(); // returns author of comment
 }
 
 public interface ICommentSaveResult{

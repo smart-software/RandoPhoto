@@ -11,7 +11,9 @@ import com.rando.library.LibManager.GENERALERROR;
  * Created by SERGant on 11.10.2014.
  */
 public class UserInterfaces {
-    public interface IUser {
+
+
+	public interface IUser {
         public String GetUID(); // Unique id for user. Consists from letters (all cases) and digits
 
         public String GetUserName(); // Username - can be formed from letters (all cases) and digits
@@ -79,12 +81,22 @@ public class UserInterfaces {
     public interface IGetTotaLikesCallback {
     	void OnGetTotalRandos(IGetTotalLikesResult getTotalLikesResult);
     }
+    
+    public interface IUserGetByIdResult {
+    	IUser getUser();
+    	GENERALERROR getUserByIdResult();
+	}
+    
+    public interface IUserGetByIdCallback {
+    	void OnGetUserById(IUserGetByIdResult userGetByIdResult);
+	}
 
     public interface IUserManager {
     	public ILoggedUser GetCurrentUser(); //Returns current user by ParseUser.getCurrentUser (locally). Returns null if no logged user. - fast
         public void LogInUser(String userName, String userPassword, IUserLoginCallback loginCallback); //Login registered user - background web task - ~1 sec
         public void LogOffUser(); // Logoff current user - locally, web access optional - fast
-        public void RegisterUser(String userName, String userPassword, String userEmail, Uri avatar, Context context,IUserRegisterCallback registerCallback); // Register user - web background task - ~1 sec
+        public void RegisterUser(String userName, String userPassword, String userEmail, File avatar, Context context,IUserRegisterCallback registerCallback); // Register user - web background task - ~1 sec
         public void SaveCurrentUser(IUserSaveCallback userSaveCallback); // Save current logged Parse User. 
+        public void GetUserById(String userId, IUserGetByIdCallback userGetCallback);
         }
 }

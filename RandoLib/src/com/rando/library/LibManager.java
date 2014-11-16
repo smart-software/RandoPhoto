@@ -7,12 +7,22 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Bitmap.Config;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
+
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -83,6 +93,9 @@ public final class LibManager{
 		GENERALERROR error;
 		int[] listOfErrors = {-1,1,100,101,102,103,104,105,106,107,108,109,111,112,115,116,119,120,121,122,123,124,125,137,139,140,141,200,201,202,203,204,205,206,207,208,250,251,252};
 		int indexError = Arrays.asList(listOfErrors).indexOf(errorCode);
+		if (indexError == -1 ) { //"-1" means "not contained in array"
+			indexError = 0;
+		}
 		error = GENERALERROR.values()[indexError];
 		return error;
 	}
@@ -118,4 +131,87 @@ public final class LibManager{
 	    }
 		return bytes;
 	}
+	
+	public static File convertByteToFile(String filename, byte[] byteArray) { 
+        File file = createFile(filename);
+        byte[] bFile = byteArray;
+ 
+        try { //convert array of bytes into file
+	    FileOutputStream fileOuputStream = 
+                  new FileOutputStream(file); 
+	    fileOuputStream.write(bFile);
+	    fileOuputStream.close();
+ 
+	    System.out.println("Done");
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+		return file;
+	}
+	
+	protected static File createFile(String filename) {
+		// To be safe, you should check that the SDCard is mounted
+	    // using Environment.getExternalStorageState() before doing this.
+	File mediaFile = null;
+		if (isExternalStorageAvailable()) {
+			// 1. Get the external storage directory
+			String appName = "RandoPhoto";
+			File mediaStorageDir = new File(
+					Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+					appName);
+			
+			// 2. Create our subdirectory
+			if (! mediaStorageDir.exists()) {
+				if (! mediaStorageDir.mkdirs()) {
+					Log.e("TAG", "Failed to create directory.");
+					return null;
+				}
+			}
+			
+			// 3. Create a file name
+			// 4. Create the file
+			
+			Date now = new Date();
+			String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(now);
+			
+			String path = mediaStorageDir.getPath() + File.separator;
+			mediaFile = new File(path + filename + ".jpg");	
+		}
+		return mediaFile;
+}
+private static boolean isExternalStorageAvailable() {
+	String state = Environment.getExternalStorageState();
+			
+	if (state.equals(Environment.MEDIA_MOUNTED)) {
+	return true;
+	}
+	else {
+	return false;
+	}
+}
+public static Bitmap drawableToBitmap (Drawable drawable) {
+		    Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Config.ARGB_8888);
+		    Canvas canvas = new Canvas(bitmap); 
+		    drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+		    drawable.draw(canvas);
+		    return bitmap;
+		}
+private void writeTofile(Bitmap bitmap, File file) {
+	FileOutputStream out = null;
+	try {
+	    out = new FileOutputStream(file);
+	    bitmap.compress(Bitmap.CompressFormat.PNG, 100, out); // bmp is your Bitmap instance
+	    // PNG is a lossless format, the compression factor (100) is ignored
+	} catch (Exception e) {
+	    e.printStackTrace();
+	} finally {
+	    try {
+	        if (out != null) {
+	            out.close();
+	        }
+	    } catch (IOException e) {
+	        e.printStackTrace();
+	    }
+	}
+}
 }

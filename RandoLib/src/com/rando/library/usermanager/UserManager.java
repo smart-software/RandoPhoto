@@ -2,11 +2,19 @@ package com.rando.library.usermanager;
 /**
  * Created by SERGant on 11.10.2014.
  */
+import java.io.File;
+
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
+import com.parse.GetCallback;
+import com.parse.GetDataCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
@@ -15,6 +23,8 @@ import com.rando.library.LibManager;
 import com.rando.library.ParseConstants;
 import com.rando.library.usermanager.UserInterfaces.ILoggedUser;
 import com.rando.library.usermanager.UserInterfaces.IUser;
+import com.rando.library.usermanager.UserInterfaces.IUserGetByIdCallback;
+import com.rando.library.usermanager.UserInterfaces.IUserGetByIdResult;
 import com.rando.library.usermanager.UserInterfaces.IUserLoginCallback;
 import com.rando.library.usermanager.UserInterfaces.IUserLoginResult;
 import com.rando.library.usermanager.UserInterfaces.IUserManager;
@@ -30,9 +40,9 @@ public class UserManager implements IUserManager {
     public ILoggedUser GetCurrentUser() {
         ILoggedUser loggedUser = null;
         ParseUser currentUser = ParseUser.getCurrentUser();
-        if (currentUser != null) {
-        	String avatarUrl = currentUser.getParseFile(ParseConstants.KEY_AVATAR).getUrl();
-        	if (avatarUrl!=null) {
+        if (currentUser!=null){
+        	if (currentUser.containsKey(ParseConstants.KEY_AVATAR)) {
+        		String avatarUrl = currentUser.getParseFile(ParseConstants.KEY_AVATAR).getUrl();
         		loggedUser = new LoggedUser(currentUser.getObjectId(), currentUser.getUsername(), currentUser.getEmail(), avatarUrl);
         	}
         	else {
@@ -87,16 +97,13 @@ public class UserManager implements IUserManager {
 
     @Override
     public void RegisterUser(String userName, String userPassword,
-                             String userEmail, Uri avatar, Context context, final IUserRegisterCallback registerCallback) {
+                             String userEmail, File avatar, Context context, final IUserRegisterCallback registerCallback) {
         final ParseUser newUser = new ParseUser();
         newUser.setUsername(userName);
         newUser.setPassword(userPassword);
         newUser.setEmail(userEmail);
-        if (avatar!=null) {
-    			newUser.put(ParseConstants.KEY_FILE, LibManager.uriToParseFile(context, avatar));
-    		}
-
-        newUser.signUpInBackground(new SignUpCallback() {
+        
+        final SignUpCallback sighUpCallback = new SignUpCallback() {
             @Override
             public void done(ParseException e) {
                 IUserRegisterResult registerResult = null;
@@ -123,7 +130,30 @@ public class UserManager implements IUserManager {
 
                 if(registerCallback != null) registerCallback.OnUserRegister(registerResult);
             }
-        });
+        };
+        
+        if (avatar.isFile()) {
+        		final ParseFile avatarParseFile = LibManager.fileToParseFile(avatar);
+        		avatarParseFile.saveInBackground(new SaveCallback() {
+					
+					@Override
+					public void done(ParseException e) {
+						if (e==null){
+							newUser.put(ParseConstants.KEY_FILE, avatarParseFile);
+							newUser.signUpInBackground(sighUpCallback);
+						}
+						else {
+							Log.d("Register user", "Error: "+e);
+						}
+					}
+				});
+    			
+    		}
+        else {
+        	newUser.signUpInBackground(sighUpCallback);
+        }
+
+        
     }
 
 
@@ -148,5 +178,59 @@ public class UserManager implements IUserManager {
 		});
 		
 	}
-    
+
+	@Override
+	public void GetUserById(String userId, final IUserGetByIdCallback userGetCallback) {
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER);
+		query.getInBackground(userId, new GetCallback<ParseObject>() { //indian code alert
+			
+			@Override
+			public void done(final ParseObject userParse, ParseException e) {
+				IUserGetByIdResult getByIdResult = null;
+				if (e==null) {
+					if (userParse.containsKey(ParseConstants.KEY_FILE)){
+						ParseFile avatarFile = userParse.getParseFile(ParseConstants.KEY_FILE);
+						avatarFile.getDataInBackground(new GetDataCallback() {
+							
+							@Override
+							public void done(byte[] byteArray, ParseException e) {
+								IUserGetByIdResult getByIdResultWithAvatar = null;
+								if (e==null){
+									File avatarFile = LibManager.convertByteToFile("avatar", byteArray);
+									IUser user = new User(userParse.getObjectId(), userParse.getString(ParseConstants.KEY_USERNAME),
+											avatarFile);
+									getByIdResultWithAvatar = new UserGetByIdResult(user, GENERALERROR.SUCCESS);
+								}
+								else {
+									GENERALERROR error = LibManager.decodeError(e.getCode());
+									getByIdResultWithAvatar = new UserGetByIdResult(null, error);
+								}
+								if (userGetCallback!=null) {
+									userGetCallback.OnGetUserById(getByIdResultWithAvatar);
+								}
+							}
+						});
+					
+							
+					}
+					else {
+						IUser user = new User(userParse.getObjectId(), userParse.getString(ParseConstants.KEY_USERNAME));
+						getByIdResult = new UserGetByIdResult(user, GENERALERROR.SUCCESS);
+					}
+					
+					
+				}
+				else {
+					GENERALERROR error = LibManager.decodeError(e.getCode());
+					getByIdResult = new UserGetByIdResult(null, error);
+				}
+				
+				if (userGetCallback!=null) {
+					userGetCallback.OnGetUserById(getByIdResult);
+				}
+			}
+		});
+	}
+
+
 }

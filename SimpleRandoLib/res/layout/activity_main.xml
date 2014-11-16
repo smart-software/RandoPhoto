@@ -1,0 +1,206 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <Button
+        android:id="@+id/Button_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/Button_3"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Button_2"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_13"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Button_10"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Button_6"
+        android:layout_toRightOf="@+id/Button_5"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/Button_2"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Button_10"
+        android:layout_toLeftOf="@+id/Button_3"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/Button_11"
+        android:layout_alignTop="@+id/Button_14"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Button_5"
+        android:layout_toLeftOf="@+id/Button_2"
+        android:background="@drawable/ic_launcher"
+         />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/textView1"
+        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignParentRight="true"
+        android:text="Get"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView1"
+        android:text="Sunset"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ImageView
+        android:id="@+id/imageViewLocal"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView3"
+        android:background="@drawable/road" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textView2"
+        android:text="No Title"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ImageView
+        android:id="@+id/ImageView01"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/imageViewLocal"
+        android:background="@drawable/no_image_thumb" />
+
+    <TextView
+        android:id="@+id/textCallback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/ImageView01"
+        android:text="Text Callback"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/Button_16"
+        android:text="Sending"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <Button
+        android:id="@+id/Button_16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/Button_17"
+        android:layout_toLeftOf="@+id/Button_14"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Button_14"
+        android:layout_toLeftOf="@+id/Button_15"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Button_3"
+        android:layout_toRightOf="@+id/Button_5"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Button_2"
+        android:layout_toRightOf="@+id/Button_2"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Button_4"
+        android:layout_toRightOf="@+id/Button_3"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/textView1"
+        android:layout_below="@+id/Button_5"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Button_5"
+        android:layout_toRightOf="@+id/Button_5"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Button_6"
+        android:layout_toRightOf="@+id/Button_6"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/Button_8"
+        android:layout_below="@+id/Button_8"
+        android:background="@drawable/ic_launcher" />
+
+</RelativeLayout>
