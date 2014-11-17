@@ -9,11 +9,14 @@ import com.rando.library.LibManager.GENERALERROR;
 
 public class IRandoManagerInterfaces {
 	
+
 public interface IRandoManager {
     public IRandoPhoto GetLastRando(IGetLastRandoCallback getLastRandoCallback);
     public void SaveIPhoto(IRandoPhoto photo, IPhotoSaveCallback photoSaveCallback); //Save photo to database. Also sends to 2 random users. Note: saves eventually. If no network will save when connection established.
     public void SaveIComment(IComment comment, ICommentSaveCallback commentSaveCallback);//Save comment to database. Note: saves eventually. If no network will save when connection established.
-    public void GetPhotoComments(String photoId, boolean recent, int numberOfRecentComments, ICommentGetCommentCallback commentGetCallback); // get all cooments for this PhotoID
+    public void GetRecentPhotoComments(String photoId, int numberOfRecentComments, ICommentGetCommentCallback commentGetCallback); // get all cooments for this PhotoID
+    public void GetComments(String photoId, int fromComment, int toComment, ICommentGetCommentCallback commentGetCallback); // fromComment - the most recent one
+    public void GetTotalNumberOfComments(String photoId, IGetTotalNumberOfCommentsCallback callback);
     public void GetPhotoById(String photoId, IPhotoGetCallback photoGetResult);// gets single photo by id
 }
 public interface IGetLastRandoResult {
@@ -64,4 +67,14 @@ public interface ICommentGetResult {
 public interface  ICommentGetCommentCallback{
 	void onGetComment(ICommentGetResult getCommentResult);
 }
+
+public interface IGetTotalNumberOfCommentsResult {
+	int getTotalNumberOfComments();
+	GENERALERROR GetErrorCode(); 
+}
+
+public interface IGetTotalNumberOfCommentsCallback {
+	void onGetTotalNumberOfComments(IGetTotalNumberOfCommentsResult result);
+}
+
 }

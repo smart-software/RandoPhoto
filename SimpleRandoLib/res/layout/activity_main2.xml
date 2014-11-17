@@ -6,59 +6,67 @@
 
     <Button
         android:id="@+id/Button_4"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/Button_3"
-        android:background="@drawable/circle" />
+        android:background="@drawable/ic_launcher" />
 
     <Button
         android:id="@+id/Button_5"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/Button_2"
-        android:background="@drawable/circle" />
+        android:background="@drawable/ic_launcher" />
 
     <Button
         android:id="@+id/Button_13"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/Button_10"
-        android:background="@drawable/circle" />
+        android:background="@drawable/ic_launcher" />
 
     <Button
         android:id="@+id/Button_2"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/Button_6"
         android:layout_toRightOf="@+id/Button_5"
-        android:background="@drawable/circle" />
+        android:background="@drawable/ic_launcher" />
 
     <Button
         android:id="@+id/Button_3"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/Button_2"
-        android:background="@drawable/circle" />
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Button_10"
+        android:layout_toLeftOf="@+id/Button_3"
+        android:background="@drawable/ic_launcher" />
 
     <Button
         android:id="@+id/Button_15"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/Button_11"
         android:layout_alignTop="@+id/Button_14"
-        android:background="@drawable/circle" />
+        android:background="@drawable/ic_launcher" />
 
     <Button
         android:id="@+id/Button_1"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_above="@+id/Button_5"
         android:layout_toLeftOf="@+id/Button_2"
-        android:background="@drawable/circle"
+        android:background="@drawable/ic_launcher"
          />
 
     <TextView
@@ -124,83 +132,75 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
-        android:id="@+id/Button_6"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_below="@+id/Button_3"
-        android:layout_toRightOf="@+id/Button_5"
-        android:background="@drawable/circle" />
-
-    <Button
-        android:id="@+id/Button_8"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_below="@+id/Button_4"
-        android:layout_toRightOf="@+id/Button_3"
-        android:background="@drawable/circle" />
-
-    <Button
-        android:id="@+id/Button_7"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignLeft="@+id/Button_3"
-        android:layout_below="@+id/Button_3"
-        android:background="@drawable/circle" />
-
-    <Button
-        android:id="@+id/Button_9"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/Button_5"
-        android:background="@drawable/circle" />
-
-    <Button
-        android:id="@+id/Button_10"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_below="@+id/Button_5"
-        android:layout_toRightOf="@+id/Button_5"
-        android:background="@drawable/circle" />
-
-    <Button
-        android:id="@+id/Button_11"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_below="@+id/Button_6"
-        android:layout_toRightOf="@+id/Button_6"
-        android:background="@drawable/circle" />
-
-    <Button
-        android:id="@+id/Button_12"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_below="@+id/Button_8"
-        android:layout_toRightOf="@+id/Button_7"
-        android:background="@drawable/circle" />
-
-    <Button
-        android:id="@+id/Button_14"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_below="@+id/Button_9"
-        android:layout_toRightOf="@+id/Button_13"
-        android:background="@drawable/circle" />
-
-    <Button
         android:id="@+id/Button_16"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/Button_13"
-        android:background="@drawable/circle" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/Button_17"
+        android:layout_toLeftOf="@+id/Button_14"
+        android:background="@drawable/ic_launcher" />
 
     <Button
         android:id="@+id/Button_17"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_below="@+id/Button_13"
-        android:layout_toRightOf="@+id/textView1"
-        android:background="@drawable/circle" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Button_14"
+        android:layout_toLeftOf="@+id/Button_15"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Button_3"
+        android:layout_toRightOf="@+id/Button_5"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/textView1"
+        android:layout_below="@+id/Button_5"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Button_5"
+        android:layout_toRightOf="@+id/Button_5"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Button_10"
+        android:layout_toRightOf="@+id/Button_6"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Button_11"
+        android:layout_toRightOf="@+id/Button_11"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Button_15"
+        android:layout_toRightOf="@+id/Button_15"
+        android:background="@drawable/ic_launcher" />
+
+    <Button
+        android:id="@+id/Button_11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/Button_14"
+        android:layout_toRightOf="@+id/Button_14"
+        android:background="@drawable/ic_launcher" />
 
 </RelativeLayout>

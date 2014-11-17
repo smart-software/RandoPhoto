@@ -1,6 +1,7 @@
 package com.rando.library.randomanager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -27,6 +28,8 @@ import com.rando.library.randomanager.IRandoManagerInterfaces.ICommentSaveCallba
 import com.rando.library.randomanager.IRandoManagerInterfaces.ICommentSaveResult;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IGetLastRandoCallback;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IGetLastRandoResult;
+import com.rando.library.randomanager.IRandoManagerInterfaces.IGetTotalNumberOfCommentsCallback;
+import com.rando.library.randomanager.IRandoManagerInterfaces.IGetTotalNumberOfCommentsResult;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IPhotoGetCallback;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IPhotoSaveCallback;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IPhotoSaveResult;
@@ -35,8 +38,8 @@ import com.rando.library.randomanager.IRandoManagerInterfaces.IRandoPhotoGetResu
 
 public class RandoManager implements IRandoManager{
 	
-	private String mRandomUserIndex1;
-	private String mRandomUserIndex2;
+	private String mRandomUserId1;
+	private String mRandomUserId2;
 	private int mUserIndex2;
 
 	@Override
@@ -72,19 +75,21 @@ public class RandoManager implements IRandoManager{
 		
 		ParseQuery<ParseObject> queryPickRandomUsers = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER);
 		queryPickRandomUsers.addAscendingOrder(ParseConstants.KEY_CREATED_AT);
+		String[] excludeCurrentUser = {ParseUser.getCurrentUser().getObjectId()};
+		queryPickRandomUsers.whereNotContainedIn(ParseConstants.KEY_OBJECT_ID, Arrays.asList(excludeCurrentUser));
 		queryPickRandomUsers.countInBackground(new CountCallback() { // indian code alert!
 			@Override
 			public void done(int count, ParseException e) {
 				if (e==null) {
 					Random r = new Random();
 					int userIndex1 = r.nextInt(count)+1;
+					int userIndex2 = 1;
 					
-					boolean segmentLeft = r.nextBoolean();
-					if (segmentLeft == true) {
-						mUserIndex2 = r.nextInt(userIndex1)+1;
-					}
-					else {
-						mUserIndex2 = r.nextInt(count-userIndex1)+userIndex1;
+					for (int i = 0; i<100;i++){
+						userIndex2 = r.nextInt(count)+1;
+						if (userIndex1!=userIndex2){
+							break;
+						}
 					}
 					
 					ParseQuery<ParseObject> queryGetIdRandomUsers = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER);
@@ -96,7 +101,7 @@ public class RandoManager implements IRandoManager{
 						@Override
 						public void done(List<ParseObject> list, ParseException e) {
 							if (e==null) {
-								mRandomUserIndex1 = list.get(0).getString(ParseConstants.KEY_USERNAME);
+								mRandomUserId1 = list.get(0).getObjectId();
 								ParseQuery<ParseObject> queryGetId2RandomUsers = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER);
 								queryGetId2RandomUsers.addAscendingOrder(ParseConstants.KEY_CREATED_AT);
 								queryGetId2RandomUsers.setSkip(mUserIndex2-1);
@@ -106,10 +111,10 @@ public class RandoManager implements IRandoManager{
 									@Override
 									public void done(List<ParseObject> list, ParseException e) {
 										if (e==null){
-											mRandomUserIndex2 = list.get(0).getString(ParseConstants.KEY_USERNAME);
-											simpleSavePhotoByUsersId(photo, mRandomUserIndex1, mRandomUserIndex2, photoSaveCallback);
-											sendPushUser(mRandomUserIndex1, "You have one new Rando to review!");
-											sendPushUser(mRandomUserIndex2, "You have one new Rando to review!");
+											mRandomUserId2 = list.get(0).getObjectId();
+											simpleSavePhotoByUsersId(photo, mRandomUserId1, mRandomUserId2, photoSaveCallback);
+											sendPushUser(mRandomUserId1, "You have one new Rando to review!");
+											sendPushUser(mRandomUserId2, "You have one new Rando to review!");
 										}
 									}
 								});
@@ -159,11 +164,12 @@ public class RandoManager implements IRandoManager{
 	}
 	
 	@Override
-	public void GetPhotoComments(String photoId, boolean recent,
+	public void GetRecentPhotoComments(String photoId, 
 			int numberOfRecentComments, final ICommentGetCommentCallback commentGetCallback) {
 			ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_COMMENT);
 			query.whereEqualTo(ParseConstants.KEY_PARENT, photoId);
 			query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
+			query.setLimit(numberOfRecentComments);
 			query.findInBackground(new FindCallback<ParseObject>() {
 				
 				@Override
@@ -192,6 +198,43 @@ public class RandoManager implements IRandoManager{
 				}
 			});
 		
+	}
+	
+	@Override
+	public void GetComments(String photoId, int fromComment, int toComment,
+			final ICommentGetCommentCallback commentGetCallback) {
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_COMMENT);
+		query.whereEqualTo(ParseConstants.KEY_PARENT, photoId);
+		query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
+		query.setSkip(fromComment-1);
+		query.setLimit(toComment-fromComment);
+		query.findInBackground(new FindCallback<ParseObject>() {
+			
+			@Override
+			public void done(List<ParseObject> list, ParseException e) {
+				
+				ICommentGetResult getCommentResult;
+				if(e==null){
+					IComment[] commentArray = new Comment[list.size()];
+					int i = 0;
+					IComment tempComment;
+					for (ParseObject comment : list) {
+						tempComment = new Comment(comment.getObjectId(), comment.getCreatedAt(), 
+								comment.getString(ParseConstants.KEY_PARENT), comment.getString(ParseConstants.KEY_CREATED_BY),comment.getString(ParseConstants.KEY_COMMENT_STRING),
+								comment.getString(ParseConstants.KEY_LOCALE));
+						commentArray[i] = tempComment;
+					}
+					getCommentResult = new CommentGetResult(commentArray, GENERALERROR.SUCCESS);
+				}
+				else{
+					getCommentResult = new CommentGetResult(null, LibManager.decodeError(e.getCode()));
+				}
+				
+					if (commentGetCallback!=null) {
+						commentGetCallback.onGetComment(getCommentResult);
+					}
+			}
+		});
 	}
 
 
@@ -263,8 +306,8 @@ public class RandoManager implements IRandoManager{
 	}
 	private ArrayList<String> getReviewersIds(){
 		ArrayList<String> reviewers = new ArrayList<String>();
-		reviewers.add(mRandomUserIndex1);
-		reviewers.add(mRandomUserIndex2);
+		reviewers.add(mRandomUserId1);
+		reviewers.add(mRandomUserId2);
 		return reviewers;
 	}
 	private void sendPushUser(String userId, String message){
@@ -279,4 +322,29 @@ public class RandoManager implements IRandoManager{
 			}
 		});
 	}
+
+	@Override
+	public void GetTotalNumberOfComments(String photoId,
+			final IGetTotalNumberOfCommentsCallback callback) {
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_COMMENT);
+		query.whereEqualTo(ParseConstants.KEY_PARENT, photoId);
+		query.countInBackground(new CountCallback() {
+			
+			@Override
+			public void done(int count, ParseException e) {
+				IGetTotalNumberOfCommentsResult getTotalRandosResult = null;
+				if (e==null){
+					getTotalRandosResult = new GetTotalNumberOfCommentsResult(count, GENERALERROR.SUCCESS);
+				}
+				else {
+					getTotalRandosResult = new GetTotalNumberOfCommentsResult(0, LibManager.decodeError(e.getCode()));
+				}
+				if (callback!=null){
+					callback.onGetTotalNumberOfComments(getTotalRandosResult);
+				}
+			}
+		});
+	}
+
+
 }

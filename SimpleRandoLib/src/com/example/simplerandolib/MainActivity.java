@@ -35,6 +35,7 @@ import com.rando.library.randomanager.IRandoManagerInterfaces.IRandoManager;
 import com.rando.library.randomanager.IRandoPhoto;
 import com.rando.library.randomanager.RandoManager;
 import com.rando.library.randomanager.RandoPhoto;
+import com.rando.library.usermanager.User;
 import com.rando.library.usermanager.UserInterfaces.ILoggedUser;
 import com.rando.library.usermanager.UserInterfaces.IUser;
 import com.rando.library.usermanager.UserInterfaces.IUserManager;
@@ -138,11 +139,13 @@ private void initializeButtons(){
     	}
     });
     
-    but7.setText("");
+    but7.setText("HasAvatarFile");
     but7.setOnClickListener(new OnClickListener() {
     	@Override
     	public void onClick(View v) {
-    		
+    		File file = createFile();
+    		IUser user = new User("EVHodIfCao", "user25409", file);
+    		boolean hasAvatar = user.HasAvatarFile();
     	}
     });
     
@@ -179,12 +182,12 @@ private void initializeButtons(){
     	}
     });
     
-    but11.setText("GetPhotoComments");
+    but11.setText("GetRecentPhotoComments");
     but11.setOnClickListener(new OnClickListener() {
     	@Override
     	public void onClick(View v) {
     		String photoId = "r9dxl8r6Wt";
-    		mRandoManager.GetPhotoComments(photoId, true, 15, null);
+    		mRandoManager.GetRecentPhotoComments(photoId, 15, null);
     	}
     });
     
@@ -194,6 +197,44 @@ private void initializeButtons(){
     	public void onClick(View v) {
     		String photoId = "r9dxl8r6Wt"; 
     		mRandoManager.GetPhotoById(photoId, null);
+    	}
+    });
+    
+    but13.setText("GetPhotoComments");
+    but13.setOnClickListener(new OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+    		String photoId = "r9dxl8r6Wt";
+    		int fromPhoto = 15;
+    		int toPhoto = 30;
+    		mRandoManager.GetComments(photoId, fromPhoto, toPhoto, null);
+    	}
+    });
+    
+    but14.setText("GetTotalComments");
+    but14.setOnClickListener(new OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+    		String photoId = "r9dxl8r6Wt";
+    		mRandoManager.GetTotalNumberOfComments(photoId, null);
+    	}
+    });
+    
+    but15.setText("GetTotalRandos");
+    but15.setOnClickListener(new OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+    		IUser user = new User("EVHodIfCao", "user25409");
+    		user.GetTotalRandos(null);
+    	}
+    });
+    
+    but16.setText("GetTotalLikes");
+    but16.setOnClickListener(new OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+    		IUser user = new User("EVHodIfCao", "user25409");
+    		user.GetTotalLikes(null);
     	}
     });
 
