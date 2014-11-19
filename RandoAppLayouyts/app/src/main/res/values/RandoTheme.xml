@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="RandoTheme.MainActivity" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+        <item name="android:windowBackground">@color/RandoTheme.background.bright</item>
+        <item name="android:textColor">@color/RandoTheme.text.basic.gray</item>
+    </style>
+    
+    <style name="RandoTheme.Buttons.Bottom" parent="@style/RandoTheme.MainActivity">
+        <item name="android:background">@drawable/bottom_button_shape</item>
+        <item name="android:padding">3dp</item>
+    </style>
+    
+    <style name="RandoTheme.Title.Background" parent="@style/RandoTheme.MainActivity">
+        <item name="android:background">@color/RandoTheme.logobackground.blue.pastellight</item>
+    </style>
+    
+    <style name="RandoTheme.Buttons.Simple" parent="@style/RandoTheme.MainActivity">
+        <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
+        <item name="android:background">@drawable/simple_button_shape</item>
+        <item name="android:shadowColor">#A8A8A8</item>
+        <item name="android:padding">1dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+    </style>
+    
+    <!-- TabWidget stuff -->
+    <style name="RandoTheme.Tab.Widget" parent="@style/RandoTheme.MainActivity">
+    	<item name="android:tabWidgetStyle">@style/RandoTheme.Tab.Widget.Main</item>
+   	</style>
+	<style name="RandoTheme.Tab.Widget.Main" parent="@android:style/Widget.TabWidget">
+    	<item name="android:textAppearance">@style/CustomTabWidgetText</item>
+    	<item name="android:background">@color/RandoTheme.tab.green</item>
+	</style>
+	<style name="CustomTabWidgetText" parent="@android:style/TextAppearance.Widget.TabWidget">
+	    <!-- for custom tab widget text size -->
+	</style>
+
+    <color name="RandoTheme.background.bright">#FBFCDD</color>
+    <color name="RandoTheme.tab.green">#5D9648</color>
+    <color name="RandoTheme.additional.green.light">#ABC99C</color>
+    <color name="RandoTheme.additional.purple">#B59EFC</color>
+    <color name="RandoTheme.logobackground.blue.pastellight">#9C9DC9</color>
+
+    <color name="RandoTheme.text.basic.gray">#535348</color>
+	
+</resources>

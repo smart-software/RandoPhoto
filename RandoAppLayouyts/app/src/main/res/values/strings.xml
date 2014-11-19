@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+  <string name="app_name">RandoPhoto</string>
+  <string name="email_text">Email:</string>
+  <string name="nickname_text">Nickname:</string>
+  <string name="password_text">Password:</string>
+
+  <string name="login_text">Login</string>
+  <string name="login_error_nodata_text">Login or password can not be empty</string>
+  <string name="login_error_underfined_text">Underfined error</string>
+  <string name="login_error_notexist_text">User does not exist</string>
+  <string name="login_error_badpassword_text">Bad password</string>
+
+  <string name="register_text">Register</string>
+  <string name="register_error_nodata_text">Text can not be empty</string>
+  <string name="register_error_underfined_text">Underfined error</string>
+  <string name="register_error_userexist_text">User already exists</string>
+  <string name="register_error_badpassword_text">Bad password</string>
+
+  <string name="my_rando_tab_text">My Rando</string>
+  <string name="top_randos_tab_text">Top Randos</string>
+  <string name="rando_message_tab_text">Rando Message</string>
+
+  <string name="rando_likes_text">Likes:</string>
+  <string name="rando_comments_text">Comments:</string>
+  <string name="total_randos_text">Total Randos: </string>
+  <string name="total_likes_text">Total Likes</string>
+  <string name="last_rando_text">Last Rando</string>
+    <string name="rando_message_like">Like</string>
+    <string name="rando_message_dislike">Dislike</string>
+
+
+  
+  
+</resources>

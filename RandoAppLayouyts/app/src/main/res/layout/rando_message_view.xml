@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1"
+    style="@android:style/Theme.NoTitleBar">
+
+    <!-- Top panel -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0"
+        >
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/RandoTheme.Title.Background"
+            >
+            <ImageView
+                android:src="@drawable/rando_logo"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"/>
+        </FrameLayout>
+    </LinearLayout>
+    <!-- End of top panel -->
+
+    <FrameLayout
+        android:id="@+id/viewRandoPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1">
+    </FrameLayout>
+
+    <!-- Bottom panel -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_weight="0"
+        >
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:weightSum="10">
+            <Button
+                android:id="@+id/btnCapture"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:text="@string/rando_message_like"
+                android:scaleType="centerInside"
+                style="@style/RandoTheme.Buttons.Simple"
+                />
+            <Button
+                android:id="@+id/btnPickImg"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:text="@string/rando_message_dislike"
+                android:scaleType="centerInside"
+                style="@style/RandoTheme.Buttons.Simple"/>
+        </LinearLayout>
+    </FrameLayout>
+    <!-- End of bottom panel -->
+
+</LinearLayout>

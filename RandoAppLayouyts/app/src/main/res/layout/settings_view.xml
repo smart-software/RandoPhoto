@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                style="@android:style/Theme.NoTitleBar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+  <GridLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="true"
+    android:columnCount="2" >
+
+    <FrameLayout
+      android:layout_row="0"
+      android:layout_column="0"
+      android:layout_columnSpan="2"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      style="@style/RandoTheme.Title.Background"
+      >
+      <ImageView
+        android:src="@drawable/rando_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"/>
+    </FrameLayout>
+
+    <TextView
+      android:id="@+id/tvUserName"
+      android:layout_row="1"
+      android:layout_column="0"
+      android:layout_gravity="fill_horizontal|top"
+      android:text="UserName" />
+    <ImageView
+      android:id="@+id/ivUserLogo"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_row="1"
+      android:layout_column="1"
+      android:layout_gravity="fill_horizontal|fill_vertical"
+      android:src="@drawable/ic_launcher" />
+
+    <Button
+      android:id="@+id/btnChangeAvatar"
+      android:layout_row="2"
+      android:layout_column="0"
+      android:layout_columnSpan="2"
+      android:layout_gravity="fill_horizontal|top"
+      android:text="Change avatar"
+      style="@style/RandoTheme.Buttons.Simple" />
+    <Button
+      android:id="@+id/btnLogOff"
+      android:layout_row="3"
+      android:layout_column="0"
+      android:layout_columnSpan="2"
+      android:layout_gravity="fill_horizontal|top"
+      android:layout_marginTop="5dp"
+      android:text="LogOff"
+      style="@style/RandoTheme.Buttons.Simple" />
+
+    <View
+      android:layout_width="match_parent"
+      android:layout_height="2dp"
+      android:layout_row="4"
+      android:layout_column="0"
+      android:layout_columnSpan="2"
+      android:layout_gravity="fill_horizontal|top"
+      android:background="@android:color/darker_gray"/>
+  </GridLayout>
+
+
+</LinearLayout>

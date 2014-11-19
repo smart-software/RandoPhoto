@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:weightSum="1"
+              style="@android:style/Theme.NoTitleBar">
+
+  <!-- Top panel -->
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="0">
+    <FrameLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      style="@style/RandoTheme.Title.Background">
+      <ImageView
+        android:src="@drawable/rando_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        
+        />
+    </FrameLayout>
+  </LinearLayout>
+  <!-- End of top panel -->
+
+  <!-- TAB HOST HERE -->
+  <TabHost
+    android:id="@android:id/tabhost"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    
+    >
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+      <TabWidget
+        android:id="@+id/"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+      </TabWidget>
+
+      <FrameLayout
+        android:id="@android:id/tabcontent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+      </FrameLayout>
+    </LinearLayout>
+  </TabHost>
+  <!-- END OF TAB HOST -->
+
+  <!-- Bottom panel -->
+  <FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_weight="0">
+    <LinearLayout
+      android:orientation="horizontal"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:weightSum="10"
+      >
+      <ImageButton
+        android:id="@+id/btnNewRando"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5"
+        android:src="@drawable/camera_icon"
+        android:padding="3dp"
+        android:scaleType="centerInside"
+        style="@style/RandoTheme.Buttons.Bottom"/>
+      <ImageButton
+        android:id="@+id/btnSettings"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="5"
+        android:src="@drawable/settings_icon"
+        android:padding="3dp"
+        android:scaleType="centerInside"
+        style="@style/RandoTheme.Buttons.Bottom"/>
+    </LinearLayout>
+  </FrameLayout>
+  <!-- End of bottom panel -->
+
+</LinearLayout>
