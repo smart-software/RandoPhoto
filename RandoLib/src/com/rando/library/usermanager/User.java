@@ -4,7 +4,10 @@ import java.io.File;
 import java.util.List;
 
 import com.parse.FindCallback;
+import com.parse.GetCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
+import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.rando.library.LibManager;
@@ -15,6 +18,8 @@ import com.rando.library.usermanager.UserInterfaces.IGetTotalLikesResult;
 import com.rando.library.usermanager.UserInterfaces.IGetTotalRandosCallback;
 import com.rando.library.usermanager.UserInterfaces.IGetTotalRandosResult;
 import com.rando.library.usermanager.UserInterfaces.IUser;
+import com.rando.library.usermanager.UserInterfaces.IUserGetAvatarCallback;
+import com.rando.library.usermanager.UserInterfaces.IUserGetAvatarResult;
 
 /**
  * Created by SERGant on 11.10.2014.
@@ -25,6 +30,7 @@ public class User implements IUser {
     private String m_userName;
     private File m_avatar = null;
     private String m_avatar_url;
+    private String m_avatarParseFileId;
 
     public User(String userID, String userName) {
         m_userID = userID;
@@ -36,7 +42,7 @@ public class User implements IUser {
         m_userName = userName;
         m_avatar = avatar;
     }
-    
+        
     public User(String userID, String userName, String avatarUrl) {
         m_userID = userID;
         m_userName = userName;
@@ -66,7 +72,48 @@ public class User implements IUser {
 	}
 
 	@Override
-	public File GetAvatar() {
+	public File GetAvatar(final IUserGetAvatarCallback userGetAvatarCallback) {
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER);
+		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
+		query.getInBackground(m_userID, new GetCallback<ParseObject>() {
+			
+			@Override
+			public void done(ParseObject user, ParseException e) { //indian code alert!
+				IUserGetAvatarResult userGetAvatarResult = null;
+				if (e==null){
+					if(user.containsKey(ParseConstants.KEY_FILE)){
+					ParseFile avatarParseFile  = user.getParseFile(ParseConstants.KEY_FILE);
+					avatarParseFile.getDataInBackground(new GetDataCallback() {
+						@Override
+						public void done(byte[] byteArray, ParseException e) {
+							IUserGetAvatarResult userGetAvatarResult = null;
+							if(e==null){
+							File avatarFile = LibManager.convertByteToFile("avatar"+m_userID, byteArray);
+							m_avatar = avatarFile;
+							userGetAvatarResult = new UserGetAvatarResult(avatarFile, GENERALERROR.SUCCESS);
+							}
+							else {
+								userGetAvatarResult = new UserGetAvatarResult(null, LibManager.decodeError(e.getCode()));
+							}
+							if (userGetAvatarCallback!=null) {
+								userGetAvatarCallback.OnUserGetAvatar(userGetAvatarResult);
+							}
+						}
+						
+					});
+				}
+					else {
+						userGetAvatarResult = new UserGetAvatarResult(null, GENERALERROR.OBJECTNOTFOUND);
+					}
+				}
+				else {
+					userGetAvatarResult = new UserGetAvatarResult(null, LibManager.decodeError(e.getCode()));					
+				}
+				if (userGetAvatarCallback!=null) {
+					userGetAvatarCallback.OnUserGetAvatar(userGetAvatarResult);
+				}
+			}
+		});
 		return m_avatar;
 	}
 

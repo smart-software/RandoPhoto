@@ -19,12 +19,21 @@ public class UserInterfaces {
         public String GetUserName(); // Username - can be formed from letters (all cases) and digits
         public void SetUserName(String userName); // Sets the name in IUser
         public String GetAvatarUrl(); // GetAvatar url 
-        public File GetAvatar(); // GetAvatar
+        public File GetAvatar(IUserGetAvatarCallback userGetAvatarCallback); // GetAvatar
         boolean HasAvatarFile(); // returns true if there is cached file of avatar
         public void GetTotalRandos(final IGetTotalRandosCallback getTotalRandosCallback); //
         public  void GetTotalLikes(final IGetTotaLikesCallback getTotalLikesResult); //
     }
+	
+	 public interface IUserGetAvatarResult {
+	    GENERALERROR userGetAvatarResult();
+	    File getAvatar();
+	 }
 
+	 public interface IUserGetAvatarCallback {
+	    void OnUserGetAvatar(IUserGetAvatarResult userGetAvatarResult);
+	 }
+	
     public interface ILoggedUser extends IUser {
         String GetUserEmail();
         void SetUserEmail(String userEmail);// Sets the email

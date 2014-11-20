@@ -180,7 +180,7 @@ public class UserManager implements IUserManager {
 	}
 
 	@Override
-	public void GetUserById(String userId, final IUserGetByIdCallback userGetCallback) {
+	public void GetUserById(final String userId, final IUserGetByIdCallback userGetCallback) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER);
 		query.getInBackground(userId, new GetCallback<ParseObject>() { //indian code alert
 			
@@ -189,14 +189,14 @@ public class UserManager implements IUserManager {
 				IUserGetByIdResult getByIdResult = null;
 				if (e==null) {
 					if (userParse.containsKey(ParseConstants.KEY_FILE)){
-						ParseFile avatarFile = userParse.getParseFile(ParseConstants.KEY_FILE);
-						avatarFile.getDataInBackground(new GetDataCallback() {
+						ParseFile avatarParseFile = userParse.getParseFile(ParseConstants.KEY_FILE);
+						avatarParseFile.getDataInBackground(new GetDataCallback() {
 							
 							@Override
 							public void done(byte[] byteArray, ParseException e) {
 								IUserGetByIdResult getByIdResultWithAvatar = null;
 								if (e==null){
-									File avatarFile = LibManager.convertByteToFile("avatar", byteArray);
+									File avatarFile = LibManager.convertByteToFile("avatar"+userId, byteArray);
 									IUser user = new User(userParse.getObjectId(), userParse.getString(ParseConstants.KEY_USERNAME),
 											avatarFile);
 									getByIdResultWithAvatar = new UserGetByIdResult(user, GENERALERROR.SUCCESS);
