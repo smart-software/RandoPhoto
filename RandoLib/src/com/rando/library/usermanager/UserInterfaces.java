@@ -7,9 +7,6 @@ import android.net.Uri;
 
 import com.rando.library.LibManager.GENERALERROR;
 
-/**
- * Created by SERGant on 11.10.2014.
- */
 public class UserInterfaces {
 
 

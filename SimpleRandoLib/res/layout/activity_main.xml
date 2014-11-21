@@ -203,4 +203,14 @@
         android:layout_toRightOf="@+id/textView1"
         android:background="@drawable/circle" />
 
+    <TextView
+        android:id="@+id/callback_general_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textCallback"
+        android:layout_marginTop="16dp"
+        android:text="General callback"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
 </RelativeLayout>

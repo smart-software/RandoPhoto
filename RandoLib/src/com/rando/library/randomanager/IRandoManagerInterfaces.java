@@ -3,9 +3,6 @@ package com.rando.library.randomanager;
 import java.util.Date;
 
 import com.rando.library.LibManager.GENERALERROR;
-/**
- * Created by SERGant on 21.10.2014.
- */
 
 public class IRandoManagerInterfaces {
 	

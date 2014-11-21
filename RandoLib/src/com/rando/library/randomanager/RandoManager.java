@@ -55,7 +55,10 @@ public class RandoManager implements IRandoManager{
 			public void done(ParseObject rando, ParseException e) {
 				IGetLastRandoResult getLastRandoResult;
 				if(e==null){
-					int likesNumber = rando.getList(ParseConstants.KEY_LIKES_ID).size();
+					int likesNumber = 0;
+					if(rando.containsKey(ParseConstants.KEY_LIKES_ID)) {
+						likesNumber = rando.getList(ParseConstants.KEY_LIKES_ID).size();
+					}
 					List<String> listOfReviewers = rando.getList(ParseConstants.KEY_REVIEWERS);
 					IRandoPhoto randoPhoto = new RandoPhoto(rando.getObjectId(), rando.getCreatedAt(),
 							rando.getString(ParseConstants.KEY_TITLE), rando.getParseFile(ParseConstants.KEY_FILE).getUrl(), 

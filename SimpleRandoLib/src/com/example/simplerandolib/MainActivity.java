@@ -27,10 +27,23 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.callbacks.CommentGetCommentCallback;
+import com.example.callbacks.CommentSaveCallback;
+import com.example.callbacks.GetLastRandoCallback;
+import com.example.callbacks.GetTotalNumberOfCommentsCallback;
+import com.example.callbacks.PhotoGetCallback;
+import com.example.callbacks.PhotoSaveCallback;
+import com.example.callbacks.UserGetAvatarCallback;
 import com.parse.ParseUser;
 import com.rando.library.LibManager;
 import com.rando.library.randomanager.Comment;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IComment;
+import com.rando.library.randomanager.IRandoManagerInterfaces.ICommentGetCommentCallback;
+import com.rando.library.randomanager.IRandoManagerInterfaces.ICommentSaveCallback;
+import com.rando.library.randomanager.IRandoManagerInterfaces.IGetLastRandoCallback;
+import com.rando.library.randomanager.IRandoManagerInterfaces.IGetTotalNumberOfCommentsCallback;
+import com.rando.library.randomanager.IRandoManagerInterfaces.IPhotoGetCallback;
+import com.rando.library.randomanager.IRandoManagerInterfaces.IPhotoSaveCallback;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IRandoManager;
 import com.rando.library.randomanager.IRandoPhoto;
 import com.rando.library.randomanager.RandoManager;
@@ -38,6 +51,7 @@ import com.rando.library.randomanager.RandoPhoto;
 import com.rando.library.usermanager.User;
 import com.rando.library.usermanager.UserInterfaces.ILoggedUser;
 import com.rando.library.usermanager.UserInterfaces.IUser;
+import com.rando.library.usermanager.UserInterfaces.IUserGetAvatarCallback;
 import com.rando.library.usermanager.UserInterfaces.IUserManager;
 import com.rando.library.usermanager.UserManager;
 
@@ -49,7 +63,7 @@ public class MainActivity extends Activity {
 	IUserManager mUserManager = new UserManager();
 	IRandoManager mRandoManager = new RandoManager();
 	IUser mGenericUser;
-	
+	static TextView mCallbackText;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +71,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         CONTEXT = getApplication().getApplicationContext();
         textCallback = (TextView) findViewById(R.id.textCallback);
+        mCallbackText = (TextView) findViewById(R.id.callback_general_text);
         initializeButtons();
     
     }
@@ -84,7 +99,7 @@ private void initializeButtons(){
     but1.setOnClickListener(new OnClickListener() {
     	@Override
     	public void onClick(View v) {
-    		LibManager.InitializeLibrary(CONTEXT);
+    		LibManager.InitializeLibraryLight(CONTEXT);
     	}
     });
     
@@ -153,7 +168,8 @@ private void initializeButtons(){
     but8.setOnClickListener(new OnClickListener() {
     	@Override
     	public void onClick(View v) {
-    		mRandoManager.GetLastRando(null);
+    		IGetLastRandoCallback callback = new GetLastRandoCallback();
+    		mRandoManager.GetLastRando(callback);
     	}
     });
     
@@ -162,8 +178,9 @@ private void initializeButtons(){
     	@Override
     	public void onClick(View v) {
     		File file = createFile();
-    		IRandoPhoto photo = new RandoPhoto("Test Photo", file, mUserManager.GetCurrentUser().GetUserName());
-    		mRandoManager.SaveIPhoto(photo, null);
+    		IRandoPhoto photo = new RandoPhoto("Test Photo", file, mUserManager.GetCurrentUser().GetUID());
+    		IPhotoSaveCallback callback = new PhotoSaveCallback();
+    		mRandoManager.SaveIPhoto(photo, callback);
     	}
     });
     
@@ -177,8 +194,9 @@ private void initializeButtons(){
     		String fileUrl = "http://files.parsetfss.com/876b74df-b84e-4ef6-9e2c-ae46b8ef18d4/tfss-d4e13990-a070-4763-8ab6-b41ea3776bf9-avatar.jpg";
     		
     		IRandoPhoto photo = new RandoPhoto("kbyUAkRG31", cal.getTime(), "Test Title", fileUrl, 0, ParseUser.getCurrentUser().getObjectId(), cal.getTime(), reviewersIDs);
+    		ICommentSaveCallback callback = new CommentSaveCallback();
     		IComment comment = new Comment(photo.GetRandoID(),mUserManager.GetCurrentUser().GetUserName(), "Test comment string.", "ENG");
-    		mRandoManager.SaveIComment(comment, null);
+    		mRandoManager.SaveIComment(comment, callback);
     	}
     });
     
@@ -187,7 +205,8 @@ private void initializeButtons(){
     	@Override
     	public void onClick(View v) {
     		String photoId = "r9dxl8r6Wt";
-    		mRandoManager.GetRecentPhotoComments(photoId, 15, null);
+    		ICommentGetCommentCallback callback = new CommentGetCommentCallback();
+    		mRandoManager.GetRecentPhotoComments(photoId, 15, callback);
     	}
     });
     
@@ -196,7 +215,8 @@ private void initializeButtons(){
     	@Override
     	public void onClick(View v) {
     		String photoId = "r9dxl8r6Wt"; 
-    		mRandoManager.GetPhotoById(photoId, null);
+    		IPhotoGetCallback callback = new PhotoGetCallback();
+    		mRandoManager.GetPhotoById(photoId, callback);
     	}
     });
     
@@ -207,16 +227,18 @@ private void initializeButtons(){
     		String photoId = "r9dxl8r6Wt";
     		int fromPhoto = 15;
     		int toPhoto = 30;
-    		mRandoManager.GetComments(photoId, fromPhoto, toPhoto, null);
+    		ICommentGetCommentCallback callback = new CommentGetCommentCallback();
+    		mRandoManager.GetComments(photoId, fromPhoto, toPhoto, callback);
     	}
     });
     
-    but14.setText("GetTotalComments");
+    but14.setText("GetPhotoTotalComments");
     but14.setOnClickListener(new OnClickListener() {
     	@Override
     	public void onClick(View v) {
     		String photoId = "r9dxl8r6Wt";
-    		mRandoManager.GetTotalNumberOfComments(photoId, null);
+    		IGetTotalNumberOfCommentsCallback callback = new GetTotalNumberOfCommentsCallback();
+    		mRandoManager.GetTotalNumberOfComments(photoId, callback);
     	}
     });
     
@@ -234,7 +256,18 @@ private void initializeButtons(){
     	@Override
     	public void onClick(View v) {
     		IUser user = new User("EVHodIfCao", "user25409");
+    		
     		user.GetTotalLikes(null);
+    	}
+    });
+    
+    but17.setText("GetUserAvatarFile");
+    but17.setOnClickListener(new OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+    		IUser user = new User("EVHodIfCao", "user25409");
+    		IUserGetAvatarCallback callback = new UserGetAvatarCallback();
+    		user.GetAvatar(callback);
     	}
     });
 
@@ -308,5 +341,9 @@ private void writeTofile(Bitmap bitmap, File file) {
 	        e.printStackTrace();
 	    }
 	}
+}
+
+public static TextView getCallbackTExtView(){
+	return mCallbackText;
 }
 }
