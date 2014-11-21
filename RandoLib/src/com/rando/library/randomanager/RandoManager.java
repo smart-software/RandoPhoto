@@ -18,6 +18,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SendCallback;
+import com.parse.ParseQuery.CachePolicy;
 import com.rando.library.LibManager;
 import com.rando.library.LibManager.GENERALERROR;
 import com.rando.library.ParseConstants;
@@ -45,6 +46,7 @@ public class RandoManager implements IRandoManager{
 	@Override
 	public IRandoPhoto GetLastRando(final IGetLastRandoCallback getLastRandoCallback) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_PHOTO);
+		query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
 		query.whereEqualTo(ParseConstants.KEY_CREATED_BY, ParseUser.getCurrentUser().getObjectId());
 		query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
 		query.getFirstInBackground(new GetCallback<ParseObject>() {
@@ -167,6 +169,7 @@ public class RandoManager implements IRandoManager{
 	public void GetRecentPhotoComments(String photoId, 
 			int numberOfRecentComments, final ICommentGetCommentCallback commentGetCallback) {
 			ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_COMMENT);
+			query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
 			query.whereEqualTo(ParseConstants.KEY_PARENT, photoId);
 			query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
 			query.setLimit(numberOfRecentComments);
@@ -204,6 +207,7 @@ public class RandoManager implements IRandoManager{
 	public void GetComments(String photoId, int fromComment, int toComment,
 			final ICommentGetCommentCallback commentGetCallback) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_COMMENT);
+		query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
 		query.whereEqualTo(ParseConstants.KEY_PARENT, photoId);
 		query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
 		query.setSkip(fromComment-1);
@@ -241,6 +245,7 @@ public class RandoManager implements IRandoManager{
 	@Override
 	public void GetPhotoById(String photoId, final IPhotoGetCallback photoGetResult) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_PHOTO);
+		query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
 		query.getInBackground(photoId, new GetCallback<ParseObject>() {
 			
 			@Override
@@ -327,6 +332,7 @@ public class RandoManager implements IRandoManager{
 	public void GetTotalNumberOfComments(String photoId,
 			final IGetTotalNumberOfCommentsCallback callback) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_COMMENT);
+		query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
 		query.whereEqualTo(ParseConstants.KEY_PARENT, photoId);
 		query.countInBackground(new CountCallback() {
 			

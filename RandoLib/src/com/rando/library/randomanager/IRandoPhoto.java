@@ -11,7 +11,7 @@ import java.util.List;
 public interface IRandoPhoto {
     public String GetRandoID();
     public int GetLikesCount();
-    public String GetCommentsCount(); // not implemented, because of dynamically changing behaviour. Better do this throw methods. 
+    public String GetCommentsCount(); // not implemented, because of dynamically changing behavior. Better do this throw methods. 
     public List<String> getReviewersIds();
     public Date LastLikeAt();
     public Date GetCreatedAt();

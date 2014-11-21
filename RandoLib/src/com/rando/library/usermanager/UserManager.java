@@ -18,6 +18,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
+import com.parse.ParseQuery.CachePolicy;
 import com.rando.library.LibManager.GENERALERROR;
 import com.rando.library.LibManager;
 import com.rando.library.ParseConstants;
@@ -182,6 +183,7 @@ public class UserManager implements IUserManager {
 	@Override
 	public void GetUserById(final String userId, final IUserGetByIdCallback userGetCallback) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER);
+		query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
 		query.getInBackground(userId, new GetCallback<ParseObject>() { //indian code alert
 			
 			@Override

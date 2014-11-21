@@ -10,6 +10,7 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseQuery.CachePolicy;
 import com.rando.library.LibManager;
 import com.rando.library.LibManager.GENERALERROR;
 import com.rando.library.ParseConstants;
@@ -129,6 +130,7 @@ public class User implements IUser {
 	@Override
 	public void GetTotalRandos(final IGetTotalRandosCallback getTotalRandosCallback) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_PHOTO);
+		query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
 		query.whereEqualTo(ParseConstants.KEY_CREATED_BY, m_userID);
 		query.whereExists(ParseConstants.KEY_LIKES_ID);
 		query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
@@ -152,6 +154,7 @@ public class User implements IUser {
 	@Override
 	public void GetTotalLikes(final IGetTotaLikesCallback getTotalLikesCallback) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_PHOTO);
+		query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
 		query.whereEqualTo(ParseConstants.KEY_CREATED_BY, m_userID);
 		query.whereExists(ParseConstants.KEY_LIKES_ID);
 		query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
