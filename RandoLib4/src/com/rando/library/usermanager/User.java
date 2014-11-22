@@ -76,47 +76,12 @@ public class User implements IUser {
 	public File GetAvatar(final IUserGetAvatarCallback userGetAvatarCallback) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER);
 		query.setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK);
-		query.getInBackground(m_userID, new GetCallback<ParseObject>() {
-			
-			@Override
-			public void done(ParseObject user, ParseException e) { //indian code alert!
-				IUserGetAvatarResult userGetAvatarResult = null;
-				if (e==null){
-					if(user.containsKey(ParseConstants.KEY_FILE)){
-					ParseFile avatarParseFile  = user.getParseFile(ParseConstants.KEY_FILE);
-					avatarParseFile.getDataInBackground(new GetDataCallback() {
-						@Override
-						public void done(byte[] byteArray, ParseException e) {
-							IUserGetAvatarResult userGetAvatarResult = null;
-							if(e==null){
-							File avatarFile = LibManager.convertByteToFile("avatar"+m_userID, byteArray);
-							m_avatar = avatarFile;
-							userGetAvatarResult = new UserGetAvatarResult(avatarFile, GENERALERROR.SUCCESS);
-							}
-							else {
-								userGetAvatarResult = new UserGetAvatarResult(null, LibManager.decodeError(e.getCode()));
-							}
-							if (userGetAvatarCallback!=null) {
-								userGetAvatarCallback.OnUserGetAvatar(userGetAvatarResult);
-							}
-						}
-						
-					});
-				}
-					else {
-						userGetAvatarResult = new UserGetAvatarResult(null, GENERALERROR.OBJECTNOTFOUND);
-					}
-				}
-				else {
-					userGetAvatarResult = new UserGetAvatarResult(null, LibManager.decodeError(e.getCode()));					
-				}
-				if (userGetAvatarCallback!=null) {
-					userGetAvatarCallback.OnUserGetAvatar(userGetAvatarResult);
-				}
-			}
-		});
+		GetCallback<ParseObject> parseGetAvatarCallback = parseGetCallbackMethod(userGetAvatarCallback);
+		query.getInBackground(m_userID, parseGetAvatarCallback);
 		return m_avatar;
 	}
+
+
 
 	@Override
 	public boolean HasAvatarFile() {
@@ -178,5 +143,50 @@ public class User implements IUser {
 		});
 	}
 	
+	private GetCallback<ParseObject> parseGetCallbackMethod(
+			final IUserGetAvatarCallback userGetAvatarCallback) {
+		GetCallback<ParseObject> parseGetAvatarCallback = new GetCallback<ParseObject>() {
+			@Override
+			public void done(ParseObject user, ParseException e) {
+				IUserGetAvatarResult userGetAvatarResult = null;
+				if (e==null & user.containsKey(ParseConstants.KEY_FILE)) {
+					ParseFile avatarParseFile  = user.getParseFile(ParseConstants.KEY_FILE);
+					GetDataCallback parseGetAvatarDataCallback = parseGetAvatarDataCallback(userGetAvatarCallback);
+					avatarParseFile.getDataInBackground(parseGetAvatarDataCallback);
+				}
+				else {
+					userGetAvatarResult = new UserGetAvatarResult(null, GENERALERROR.OBJECTNOTFOUND);
+					if(userGetAvatarCallback!=null) {
+						userGetAvatarCallback.OnUserGetAvatar(userGetAvatarResult);
+					}
+				}
+				
+			}
+
+
+		};
+		return parseGetAvatarCallback;
+	}
 	
+	private GetDataCallback parseGetAvatarDataCallback(
+			final IUserGetAvatarCallback userGetAvatarCallback) {
+		GetDataCallback parseGetAvatarDataCallback = new GetDataCallback() {
+			@Override
+			public void done(byte[] byteArray, ParseException e) {
+				IUserGetAvatarResult userGetAvatarResult = null;
+				if (e==null){
+					File avatarFile = LibManager.convertByteToFile("avatar"+m_userID, byteArray);
+					m_avatar = avatarFile;
+					userGetAvatarResult = new UserGetAvatarResult(avatarFile, GENERALERROR.SUCCESS);
+				}
+				else {
+					userGetAvatarResult = new UserGetAvatarResult(null, LibManager.decodeError(e.getCode()));
+				}
+				if (userGetAvatarCallback!=null) {
+					userGetAvatarCallback.OnUserGetAvatar(userGetAvatarResult);
+				}
+			}
+		};
+		return parseGetAvatarDataCallback;
+	}
 }

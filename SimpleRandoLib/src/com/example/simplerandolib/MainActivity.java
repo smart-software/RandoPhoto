@@ -267,7 +267,7 @@ private void initializeButtons(){
     	public void onClick(View v) {
     		IUser user = new User("EVHodIfCao", "user25409");
     		IUserGetAvatarCallback callback = new UserGetAvatarCallback();
-    		user.GetAvatar(callback);
+    		File avatarLocalFile = user.GetAvatar(callback);
     	}
     });
 
