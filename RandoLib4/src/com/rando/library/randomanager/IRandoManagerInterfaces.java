@@ -2,6 +2,10 @@ package com.rando.library.randomanager;
 
 import java.util.Date;
 
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+
 import com.rando.library.LibManager.GENERALERROR;
 
 public class IRandoManagerInterfaces {
@@ -74,4 +78,12 @@ public interface IGetTotalNumberOfCommentsCallback {
 	void onGetTotalNumberOfComments(IGetTotalNumberOfCommentsResult result);
 }
 
+public interface IPushReceiveResult {
+	String getMessage();
+}
+
+public interface IPushReceiveCallback {
+	void onPushOpen(Context context, IPushReceiveResult pushReceiveResult);
+	Class<? extends Activity> onPushGetActivityForIntent( Intent intent);
+}
 }

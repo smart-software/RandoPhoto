@@ -14,6 +14,7 @@ import java.util.TimeZone;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
@@ -33,6 +34,7 @@ import com.example.callbacks.GetLastRandoCallback;
 import com.example.callbacks.GetTotalNumberOfCommentsCallback;
 import com.example.callbacks.PhotoGetCallback;
 import com.example.callbacks.PhotoSaveCallback;
+import com.example.callbacks.PushReceiveCallback;
 import com.example.callbacks.UserGetAvatarCallback;
 import com.parse.ParseUser;
 import com.rando.library.LibManager;
@@ -57,9 +59,9 @@ import com.rando.library.usermanager.UserManager;
 
 public class MainActivity extends Activity {
 	
-	Button but1,but2,but3,but4,but5,but6,but7,but8,but9,but10,but11,but12,but13,but14,but15,but16,but17;
+	Button but1,but2,but3,but4,but5,but6,but7,but8,but9,but10,but11,but12,but13,but14,but15,but16,but17,but18,but19;
 	TextView textCallback;
-	Context CONTEXT;
+	static Context CONTEXT;
 	IUserManager mUserManager = new UserManager();
 	IRandoManager mRandoManager = new RandoManager();
 	IUser mGenericUser;
@@ -75,6 +77,19 @@ public class MainActivity extends Activity {
         initializeButtons();
     
     }
+    
+    @Override
+    protected void onResume() {
+    	if (getIntent().hasExtra("push")) {
+    	String pushMessage;
+    	pushMessage = getIntent().getExtras().getString("push");
+    	mCallbackText.setText("Push opened" + pushMessage);
+    	}
+    	
+    	super.onResume();
+    }
+    
+    
 
 private void initializeButtons(){
     but1 = (Button) findViewById(R.id.Button_1);
@@ -94,6 +109,9 @@ private void initializeButtons(){
     but15 = (Button) findViewById(R.id.Button_15);
     but16 = (Button) findViewById(R.id.Button_16);
     but17 = (Button) findViewById(R.id.Button_17);
+    but18 = (Button) findViewById(R.id.Button_18);
+    but19 = (Button) findViewById(R.id.Button_19);
+    
     
     but1.setText("Initialize");
     but1.setOnClickListener(new OnClickListener() {
@@ -270,6 +288,15 @@ private void initializeButtons(){
     		File avatarLocalFile = user.GetAvatar(callback);
     	}
     });
+    
+    but18.setText("Initialize broadcast");
+    but18.setOnClickListener(new OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+    		LibManager.setPushCallback(new PushReceiveCallback());
+    		LibManager.EnablePushNotifications();
+    	}
+    });
 
 }
 
@@ -346,4 +373,10 @@ private void writeTofile(Bitmap bitmap, File file) {
 public static TextView getCallbackTExtView(){
 	return mCallbackText;
 }
+
+public static Context getContext(){
+	return CONTEXT;
+}
+
+
 }

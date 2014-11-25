@@ -213,4 +213,20 @@
         android:text="General callback"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    <Button
+        android:id="@+id/Button_18"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_below="@+id/Button_15"
+        android:layout_toRightOf="@+id/Button_17"
+        android:background="@drawable/circle" />
+
+    <Button
+        android:id="@+id/Button_19"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_above="@+id/textView2"
+        android:layout_toRightOf="@+id/Button_18"
+        android:background="@drawable/circle" />
+
 </RelativeLayout>

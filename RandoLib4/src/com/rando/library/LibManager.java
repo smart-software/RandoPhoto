@@ -24,15 +24,20 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.parse.Parse;
+import com.parse.ParseAnalytics;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.ParseUser;
+import com.parse.PushService;
 import com.parse.SaveCallback;
+import com.rando.library.randomanager.IRandoManagerInterfaces.IPushReceiveCallback;
 
 public final class LibManager{
-    private static final String LIBVERSION = "0.2";
+    private static final String LIBVERSION = "2.4";
     private static final String LIBTAG = "[RandoLib]";
+    public static IPushReceiveCallback pushCallbackStatic; //TODO Find another way to pass this callback to pushRecevier
 
     public static void InitializeLibrary (Context context)
     {
@@ -40,7 +45,7 @@ public final class LibManager{
         Parse.enableLocalDatastore(context);
         // keys of RandoApp in Parse.com database. Client keys.
         Parse.initialize(context, "CBAorkA9uvUOf6PFYmVE2zw0Tkf54D8FX4LWaB6l", "axKtzQMEXuOK3Q9hzk84MQxE9Uk1Y6fty9RhA14B");
-   
+        
     }
 
     public static void LogText(String text) {
@@ -55,7 +60,6 @@ public final class LibManager{
     {
         // keys of RandoApp in Parse.com database. Client keys.
         Parse.initialize(context, "CBAorkA9uvUOf6PFYmVE2zw0Tkf54D8FX4LWaB6l", "axKtzQMEXuOK3Q9hzk84MQxE9Uk1Y6fty9RhA14B");
-     
     }
 
     
@@ -69,8 +73,13 @@ public final class LibManager{
     	ParsePush.subscribeInBackground("", new SaveCallback() {
 			
 			@Override
-			public void done(ParseException arg0) {
+			public void done(ParseException e) {
 				//TODO - callback. Note: this method works "eventually"
+				if (e == null) {
+				      Log.d("com.parse.push", "successfully subscribed to the broadcast channel.");
+				    } else {
+				      Log.e("com.parse.push", "failed to subscribe for push", e);
+				    }
 			}
 		});
     	if (ParseUser.getCurrentUser()!=null) {
@@ -78,11 +87,25 @@ public final class LibManager{
     	ParsePush.subscribeInBackground(userPersonalChannel, new SaveCallback() {
 			
 			@Override
-			public void done(ParseException arg0) {
+			public void done(ParseException e) {
 				// TODO  - callback. Note: this method works "eventually"
+				if (e == null) {
+				      Log.d("com.parse.push", "successfully subscribed to the broadcast channel.");
+				    } else {
+				      Log.e("com.parse.push", "failed to subscribe for push", e);
+				    }
 			}
 		});
     	}
+    	
+    	// Save the current Installation to Parse.
+    	ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+    	installation.put("user",ParseUser.getCurrentUser());
+    	installation.saveInBackground();
+    }
+    
+    public static void setPushCallback(IPushReceiveCallback pushCallback) {
+    	pushCallbackStatic = pushCallback;
     }
     
     public static enum GENERALERROR{
