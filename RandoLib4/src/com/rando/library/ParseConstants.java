@@ -26,4 +26,5 @@ public final class ParseConstants {
 	public static final String KEY_LASTLIKEDAT = "LastLikedAt";
 	public static final String KEY_REVIEWERS = "Reviewers";
 	public static final String KEY_AVATAR = "Avatar";
+	public static final String KEY_NEED_REVIEWERS_PUSH = "needReviewersPush";
 }

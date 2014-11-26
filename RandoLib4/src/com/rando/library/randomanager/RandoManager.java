@@ -41,6 +41,7 @@ public class RandoManager implements IRandoManager{
 	
 	private String mRandomUserId1;
 	private String mRandomUserId2;
+	private int mUserIndex1;
 	private int mUserIndex2;
 
 	@Override
@@ -118,8 +119,6 @@ public class RandoManager implements IRandoManager{
 										if (e==null){
 											mRandomUserId2 = list.get(0).getObjectId();
 											simpleSavePhotoByUsersId(photo, mRandomUserId1, mRandomUserId2, photoSaveCallback);
-											sendPushUser(mRandomUserId1, "You have one new Rando to review!");
-											sendPushUser(mRandomUserId2, "You have one new Rando to review!");
 										}
 									}
 								});
@@ -317,18 +316,6 @@ public class RandoManager implements IRandoManager{
 		reviewers.add(mRandomUserId1);
 		reviewers.add(mRandomUserId2);
 		return reviewers;
-	}
-	private void sendPushUser(String userId, String message){
-		ParsePush push = new ParsePush();
-		push.setChannel("user_"+userId);
-		push.setMessage(message);
-		push.sendInBackground(new SendCallback() {
-			
-			@Override
-			public void done(ParseException arg0) {
-				// TODO - send callback. this method is also "eventually"
-			}
-		});
 	}
 
 	@Override

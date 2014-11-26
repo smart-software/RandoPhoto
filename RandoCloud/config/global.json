@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "RandoPhoto": {
+            "applicationId": "CBAorkA9uvUOf6PFYmVE2zw0Tkf54D8FX4LWaB6l", 
+            "masterKey": "uITi6i3AAGEA50x7X1iG4n8aHuKTjL02eHao3C8c"
+        }, 
+        "_default": {
+            "link": "RandoPhoto"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.3.2"
+    }
+}
