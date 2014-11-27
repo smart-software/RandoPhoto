@@ -6,6 +6,22 @@
   response.success("Hello world!");
 });
 */
+
+Parse.Cloud.define("likePhoto", function(request, response) {
+	var photoId = request.params.photoId;
+	var userId = request.user.id;
+	var query = new Parse.Query("Photo");
+	query.get(photoId, {
+		  success: function(photo) {
+		    photo.addUnique("likes_id", userId);
+		    photo.save();
+		  },
+		  error: function(object, error) {
+		  }
+		});
+	
+});
+
 Parse.Cloud.afterSave("Photo", function(request) {
 	
 	if(request.object.existed() == false) {
@@ -26,4 +42,30 @@ Parse.Cloud.afterSave("Photo", function(request) {
 			});
 		}
 	  }
+	});
+
+Parse.Cloud.job("getRidOfRandos", function(request, status) {
+	  // Set up to modify user data
+	  Parse.Cloud.useMasterKey();
+	  var counter = 0;
+	  // Query for all users
+	  var currentDateMinusOneDay = new Date();
+	  currentDateMinusOneDay.setDate(currentDateMinusOneDay.getDate()-1);
+	  var query = new Parse.Query("Photo");
+	  query.lessThan("LastLikedAt", currentDateMinusOneDay);
+	  query.each(function(photo) {
+	      // Update
+		  photo.destroy();
+	      if (counter % 100 === 0) {
+	        // Set the  job's progress status
+	        status.message(counter + " photo destroyed");
+	      }
+	      counter += 1;
+	  }).then(function() {
+	    // Set the job's success status
+	    status.success("Not liked photos deleted.");
+	  }, function(error) {
+	    // Set the job's error status
+	    status.error("Error delelting not liked photos.");
+	  });
 	});
