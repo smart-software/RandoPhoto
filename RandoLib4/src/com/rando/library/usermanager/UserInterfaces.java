@@ -101,7 +101,7 @@ public class UserInterfaces {
     	public ILoggedUser GetCurrentUser(); //Returns current user by ParseUser.getCurrentUser (locally). Returns null if no logged user. - fast
         public void LogInUser(String userName, String userPassword, IUserLoginCallback loginCallback); //Login registered user - background web task - ~1 sec
         public void LogOffUser(); // Logoff current user - locally, web access optional - fast
-        public void RegisterUser(String userName, String userPassword, String userEmail, File avatar, Context context,IUserRegisterCallback registerCallback); // Register user - web background task - ~1 sec
+        public void RegisterUser(String userName, String userPassword, String userEmail, File avatar,IUserRegisterCallback registerCallback); // Register user - web background task - ~1 sec
         public void SaveCurrentUser(IUserSaveCallback userSaveCallback); // Save current logged Parse User. 
         public void GetUserById(String userId, IUserGetByIdCallback userGetCallback);
         }

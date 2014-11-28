@@ -1,9 +1,8 @@
 package com.rando.library;
-/**
- * Created by SERGant on 11.10.2014.
- */
+
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,6 +16,7 @@ import java.util.Locale;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -35,17 +35,15 @@ import com.parse.SaveCallback;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IPushReceiveCallback;
 
 public final class LibManager{
-    private static final String LIBVERSION = "2.4";
+    private static final String LIBVERSION = "3.2";
     private static final String LIBTAG = "[RandoLib]";
     public static IPushReceiveCallback pushCallbackStatic; //TODO Find another way to pass this callback to pushRecevier
 
     public static void InitializeLibrary (Context context)
     {
-    	// enable datastore (sd and internal filesystem)
-        Parse.enableLocalDatastore(context);
         // keys of RandoApp in Parse.com database. Client keys.
         Parse.initialize(context, "CBAorkA9uvUOf6PFYmVE2zw0Tkf54D8FX4LWaB6l", "axKtzQMEXuOK3Q9hzk84MQxE9Uk1Y6fty9RhA14B");
-        
+        EnablePushNotifications();
     }
 
     public static void LogText(String text) {
@@ -129,15 +127,24 @@ public final class LibManager{
 			//TODO Error getting Bytes from file
 		}
 		else {
-			fileBytes = FileHelper.reduceImageForUpload(fileBytes); //SHORT_SIDE_TARGET = 1280
-			file = new ParseFile("avatar.jpg", fileBytes);
+			fileBytes = FileHelper.reduceImageForUpload(fileBytes); //SHORT_SIDE_TARGET = 1600
+			file = new ParseFile("file.jpg", fileBytes);
 		}
 		return file;
 	}
 	public static  ParseFile fileToParseFile(File fileInput) {
 		byte[] fileBytes = convertFileToByte(fileInput);
-		fileBytes = FileHelper.reduceImageForUpload(fileBytes); //SHORT_SIDE_TARGET = 1280
-		ParseFile fileParse = new ParseFile("avatar.jpg", fileBytes);
+		fileBytes = FileHelper.reduceImageForUpload(fileBytes); //SHORT_SIDE_TARGET = 1600
+		ParseFile fileParse = new ParseFile("file.jpg", fileBytes);
+		return fileParse;
+	}
+	
+	public static ParseFile BitmapToParseFile(Bitmap bitmap) {
+		ByteArrayOutputStream stream = new ByteArrayOutputStream();
+		bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+		byte[] byteArray = stream.toByteArray();
+		byteArray = FileHelper.reduceImageForUpload(byteArray); //SHORT_SIDE_TARGET = 1600
+		ParseFile fileParse = new ParseFile("file.jpg", byteArray);
 		return fileParse;
 	}
 	public static  byte[] convertFileToByte(File fileInput){

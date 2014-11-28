@@ -98,7 +98,7 @@ public class UserManager implements IUserManager {
 
     @Override
     public void RegisterUser(String userName, String userPassword,
-                             String userEmail, File avatar, Context context, final IUserRegisterCallback registerCallback) {
+                             String userEmail, File avatar, final IUserRegisterCallback registerCallback) {
         final ParseUser newUser = new ParseUser();
         newUser.setUsername(userName);
         newUser.setPassword(userPassword);

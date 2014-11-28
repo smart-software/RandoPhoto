@@ -17,7 +17,7 @@ public class FileHelper {
 	
 	public static final String TAG = FileHelper.class.getSimpleName();
 	
-	public static final int SHORT_SIDE_TARGET = 1280;
+	public static final int SHORT_SIDE_TARGET = 1600;
 	public static final int SHORT_SIDE_Preview_TARGET = 600;
 	
 	public static byte[] getByteArrayFromFile(Context context, Uri uri) {

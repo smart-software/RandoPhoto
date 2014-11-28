@@ -2,23 +2,29 @@ package com.rando.library.randomanager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.parse.CountCallback;
 import com.parse.FindCallback;
+import com.parse.FunctionCallback;
 import com.parse.GetCallback;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
-import com.parse.ParsePush;
 import com.parse.ParseQuery;
+import com.parse.ParseQuery.CachePolicy;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-import com.parse.SendCallback;
-import com.parse.ParseQuery.CachePolicy;
 import com.rando.library.LibManager;
 import com.rando.library.LibManager.GENERALERROR;
 import com.rando.library.ParseConstants;
@@ -31,17 +37,17 @@ import com.rando.library.randomanager.IRandoManagerInterfaces.IGetLastRandoCallb
 import com.rando.library.randomanager.IRandoManagerInterfaces.IGetLastRandoResult;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IGetTotalNumberOfCommentsCallback;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IGetTotalNumberOfCommentsResult;
+import com.rando.library.randomanager.IRandoManagerInterfaces.ILikePhotoCallback;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IPhotoGetCallback;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IPhotoSaveCallback;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IPhotoSaveResult;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IRandoManager;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IRandoPhotoGetResult;
 
-public class RandoManager implements IRandoManager{
-	
+public class RandoManager implements IRandoManager {
+
 	private String mRandomUserId1;
 	private String mRandomUserId2;
-	private int mUserIndex1;
 	private int mUserIndex2;
 
 	@Override
@@ -51,296 +57,269 @@ public class RandoManager implements IRandoManager{
 		query.whereEqualTo(ParseConstants.KEY_CREATED_BY, ParseUser.getCurrentUser().getObjectId());
 		query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
 		query.getFirstInBackground(new GetCallback<ParseObject>() {
-			
+
 			@Override
 			public void done(ParseObject rando, ParseException e) {
 				IGetLastRandoResult getLastRandoResult;
-				if(e==null){
+				if (e == null) {
 					int likesNumber = 0;
-					if(rando.containsKey(ParseConstants.KEY_LIKES_ID)) {
+					if (rando.containsKey(ParseConstants.KEY_LIKES_ID)) {
 						likesNumber = rando.getList(ParseConstants.KEY_LIKES_ID).size();
 					}
 					List<String> listOfReviewers = rando.getList(ParseConstants.KEY_REVIEWERS);
-					IRandoPhoto randoPhoto = new RandoPhoto(rando.getObjectId(), rando.getCreatedAt(),
-							rando.getString(ParseConstants.KEY_TITLE), rando.getParseFile(ParseConstants.KEY_FILE).getUrl(), 
-							likesNumber, rando.getString(ParseConstants.KEY_CREATED_BY), 
-							rando.getDate(ParseConstants.KEY_LASTLIKEDAT), listOfReviewers);
+					IRandoPhoto randoPhoto = new RandoPhoto(rando.getObjectId(), rando.getCreatedAt(), rando.getString(ParseConstants.KEY_TITLE),
+							rando.getParseFile(ParseConstants.KEY_FILE).getUrl(), likesNumber, rando.getString(ParseConstants.KEY_CREATED_BY), rando
+									.getDate(ParseConstants.KEY_LASTLIKEDAT), listOfReviewers);
 					getLastRandoResult = new GetLastRandoResult(randoPhoto, GENERALERROR.SUCCESS);
-				}
-				else {
+				} else {
 					getLastRandoResult = new GetLastRandoResult(null, LibManager.decodeError(e.getCode()));
 				}
-				if(getLastRandoCallback!=null) {getLastRandoCallback.OnGetLastRando(getLastRandoResult);}
+				if (getLastRandoCallback != null) {
+					getLastRandoCallback.OnGetLastRando(getLastRandoResult);
+				}
 			}
-		});
+		}); 
 		return null;
 	}
 
 	@Override
-	public void SaveIPhoto(final IRandoPhoto photo, final IPhotoSaveCallback photoSaveCallback) {
-		
-		ParseQuery<ParseObject> queryPickRandomUsers = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER);
-		queryPickRandomUsers.addAscendingOrder(ParseConstants.KEY_CREATED_AT);
-		String[] excludeCurrentUser = {ParseUser.getCurrentUser().getObjectId()};
-		queryPickRandomUsers.whereNotContainedIn(ParseConstants.KEY_OBJECT_ID, Arrays.asList(excludeCurrentUser));
-		queryPickRandomUsers.countInBackground(new CountCallback() { // indian code alert!
+	public void SaveIPhoto(final Bitmap photo, final IPhotoSaveCallback photoSaveCallback) {
+
+		HashMap<String, Object> params = new HashMap<String, Object>(); //empty HashMap, only for compatibility with "callFunctionInBackground"
+		ParseCloud.callFunctionInBackground("pick2RandomUsers", params, new FunctionCallback<HashMap<String, Object>>() {
+
 			@Override
-			public void done(int count, ParseException e) {
-				if (e==null) {
-					Random r = new Random();
-					int userIndex1 = r.nextInt(count)+1;
-					int userIndex2 = 1;
-					
-					for (int i = 0; i<100;i++){
-						userIndex2 = r.nextInt(count)+1;
-						if (userIndex1!=userIndex2){
-							break;
-						}
-					}
-					
-					ParseQuery<ParseObject> queryGetIdRandomUsers = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER);
-					queryGetIdRandomUsers.addAscendingOrder(ParseConstants.KEY_CREATED_AT);
-					queryGetIdRandomUsers.setSkip(userIndex1-1);
-					queryGetIdRandomUsers.setLimit(1);
-					queryGetIdRandomUsers.findInBackground(new FindCallback<ParseObject>() {
-						
-						@Override
-						public void done(List<ParseObject> list, ParseException e) {
-							if (e==null) {
-								mRandomUserId1 = list.get(0).getObjectId();
-								ParseQuery<ParseObject> queryGetId2RandomUsers = new ParseQuery<ParseObject>(ParseConstants.CLASS_USER);
-								queryGetId2RandomUsers.addAscendingOrder(ParseConstants.KEY_CREATED_AT);
-								queryGetId2RandomUsers.setSkip(mUserIndex2-1);
-								queryGetId2RandomUsers.setLimit(1);
-								queryGetId2RandomUsers.findInBackground(new FindCallback<ParseObject>() {
-									
-									@Override
-									public void done(List<ParseObject> list, ParseException e) {
-										if (e==null){
-											mRandomUserId2 = list.get(0).getObjectId();
-											simpleSavePhotoByUsersId(photo, mRandomUserId1, mRandomUserId2, photoSaveCallback);
-										}
-									}
-								});
-							}
-							else {
-								if (photoSaveCallback!=null ){photoSaveCallback.onPhotoSave(new PhotoSaveResult(LibManager.decodeError(e.getCode())));}
-							}
-						}
-					});
-				}
-				else {
-					if (photoSaveCallback!=null ){photoSaveCallback.onPhotoSave(new PhotoSaveResult(LibManager.decodeError(e.getCode())));}
-				}
+			public void done(HashMap<String, Object> usersArray, ParseException e) {
+						Log.d("HashMap", (String) usersArray.get("userId1"));
+						simpleSavePhotoByUsersId(photo, usersArray.get("userId1").toString(),  usersArray.get("userId2").toString(), photoSaveCallback);
+			
 			}
 		});
-				
-				
+
 	}
 
 	@Override
-	public void SaveIComment(IComment comment,
-			final ICommentSaveCallback commentSaveCallback) {
+	public void SaveIComment(IComment comment, final ICommentSaveCallback commentSaveCallback) {
 		ParseObject commentParse = new ParseObject(ParseConstants.CLASS_COMMENT);
-		
+
 		commentParse.put(ParseConstants.KEY_COMMENT_STRING, comment.GetCommentString());
 		commentParse.put(ParseConstants.KEY_LOCALE, comment.GetLocale());
 		commentParse.put(ParseConstants.KEY_PARENT, comment.GetParentId());
 		commentParse.put(ParseConstants.KEY_CREATED_BY, ParseUser.getCurrentUser().getObjectId());
-		
+
 		commentParse.saveEventually(new SaveCallback() {
-			
+
 			@Override
 			public void done(ParseException e) {
 				ICommentSaveResult commentSaveResult;
-				if (e==null) {
+				if (e == null) {
 					commentSaveResult = new CommentSaveResult(GENERALERROR.SUCCESS);
-				}
-				else {
+				} else {
 					commentSaveResult = new CommentSaveResult(LibManager.decodeError(e.getCode()));
 				}
-				if (commentSaveCallback!=null) {
+				if (commentSaveCallback != null) {
 					commentSaveCallback.onCommentSave(commentSaveResult);
 				}
 			}
 		});
-		
+
 	}
-	
+
 	@Override
-	public void GetRecentPhotoComments(String photoId, 
-			int numberOfRecentComments, final ICommentGetCommentCallback commentGetCallback) {
-			ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_COMMENT);
-			query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
-			query.whereEqualTo(ParseConstants.KEY_PARENT, photoId);
-			query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
-			query.setLimit(numberOfRecentComments);
-			query.findInBackground(new FindCallback<ParseObject>() {
-				
-				@Override
-				public void done(List<ParseObject> list, ParseException e) {
-					
-					ICommentGetResult getCommentResult;
-					if(e==null){
-						IComment[] commentArray = new Comment[list.size()];
-						int i = 0;
-						IComment tempComment;
-						for (ParseObject comment : list) {
-							tempComment = new Comment(comment.getObjectId(), comment.getCreatedAt(), 
-									comment.getString(ParseConstants.KEY_PARENT), comment.getString(ParseConstants.KEY_CREATED_BY),comment.getString(ParseConstants.KEY_COMMENT_STRING),
-									comment.getString(ParseConstants.KEY_LOCALE));
-							commentArray[i] = tempComment;
-						}
-						getCommentResult = new CommentGetResult(commentArray, GENERALERROR.SUCCESS);
-					}
-					else{
-						getCommentResult = new CommentGetResult(null, LibManager.decodeError(e.getCode()));
-					}
-					
-						if (commentGetCallback!=null) {
-							commentGetCallback.onGetComment(getCommentResult);
-						}
-				}
-			});
-		
-	}
-	
-	@Override
-	public void GetComments(String photoId, int fromComment, int toComment,
-			final ICommentGetCommentCallback commentGetCallback) {
+	public void GetRecentPhotoComments(String photoId, int numberOfRecentComments, final ICommentGetCommentCallback commentGetCallback) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_COMMENT);
 		query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
 		query.whereEqualTo(ParseConstants.KEY_PARENT, photoId);
 		query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
-		query.setSkip(fromComment-1);
-		query.setLimit(toComment-fromComment);
+		query.setLimit(numberOfRecentComments);
 		query.findInBackground(new FindCallback<ParseObject>() {
-			
+
 			@Override
 			public void done(List<ParseObject> list, ParseException e) {
-				
+
 				ICommentGetResult getCommentResult;
-				if(e==null){
+				if (e == null) {
 					IComment[] commentArray = new Comment[list.size()];
 					int i = 0;
 					IComment tempComment;
 					for (ParseObject comment : list) {
-						tempComment = new Comment(comment.getObjectId(), comment.getCreatedAt(), 
-								comment.getString(ParseConstants.KEY_PARENT), comment.getString(ParseConstants.KEY_CREATED_BY),comment.getString(ParseConstants.KEY_COMMENT_STRING),
-								comment.getString(ParseConstants.KEY_LOCALE));
+						tempComment = new Comment(comment.getObjectId(), comment.getCreatedAt(), comment.getString(ParseConstants.KEY_PARENT),
+								comment.getString(ParseConstants.KEY_CREATED_BY), comment.getString(ParseConstants.KEY_COMMENT_STRING), comment
+										.getString(ParseConstants.KEY_LOCALE));
 						commentArray[i] = tempComment;
 					}
 					getCommentResult = new CommentGetResult(commentArray, GENERALERROR.SUCCESS);
-				}
-				else{
+				} else {
 					getCommentResult = new CommentGetResult(null, LibManager.decodeError(e.getCode()));
 				}
-				
-					if (commentGetCallback!=null) {
-						commentGetCallback.onGetComment(getCommentResult);
+
+				if (commentGetCallback != null) {
+					commentGetCallback.onGetComment(getCommentResult);
+				}
+			}
+		});
+
+	}
+
+	@Override
+	public void GetComments(String photoId, int fromComment, int toComment, final ICommentGetCommentCallback commentGetCallback) {
+		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_COMMENT);
+		query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
+		query.whereEqualTo(ParseConstants.KEY_PARENT, photoId);
+		query.addDescendingOrder(ParseConstants.KEY_CREATED_AT);
+		query.setSkip(fromComment - 1);
+		query.setLimit(toComment - fromComment);
+		query.findInBackground(new FindCallback<ParseObject>() {
+
+			@Override
+			public void done(List<ParseObject> list, ParseException e) {
+
+				ICommentGetResult getCommentResult;
+				if (e == null) {
+					IComment[] commentArray = new Comment[list.size()];
+					int i = 0;
+					IComment tempComment;
+					for (ParseObject comment : list) {
+						tempComment = new Comment(comment.getObjectId(), comment.getCreatedAt(), comment.getString(ParseConstants.KEY_PARENT),
+								comment.getString(ParseConstants.KEY_CREATED_BY), comment.getString(ParseConstants.KEY_COMMENT_STRING), comment
+										.getString(ParseConstants.KEY_LOCALE));
+						commentArray[i] = tempComment;
 					}
+					getCommentResult = new CommentGetResult(commentArray, GENERALERROR.SUCCESS);
+				} else {
+					getCommentResult = new CommentGetResult(null, LibManager.decodeError(e.getCode()));
+				}
+
+				if (commentGetCallback != null) {
+					commentGetCallback.onGetComment(getCommentResult);
+				}
 			}
 		});
 	}
-
 
 	@Override
 	public void GetPhotoById(String photoId, final IPhotoGetCallback photoGetResult) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_PHOTO);
 		query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
 		query.getInBackground(photoId, new GetCallback<ParseObject>() {
-			
+
 			@Override
 			public void done(ParseObject photo, ParseException e) {
 				IRandoPhotoGetResult getPhotoResult;
-				if(e==null){
+				if (e == null) {
 					List<String> reviwers = photo.getList(ParseConstants.KEY_REVIEWERS);
 					int likesNumber = 0;
 					if (photo.containsKey(ParseConstants.KEY_LIKES_ID)) {
 						likesNumber = photo.getList(ParseConstants.KEY_LIKES_ID).size();
 					}
-					IRandoPhoto getPhoto = new RandoPhoto(photo.getObjectId(), photo.getCreatedAt(), 
-							photo.getString(ParseConstants.KEY_TITLE), photo.getParseFile(ParseConstants.KEY_FILE).getUrl(),
-							likesNumber, photo.getString(ParseConstants.KEY_CREATED_BY),
-							photo.getDate(ParseConstants.KEY_LASTLIKEDAT), reviwers);
+					IRandoPhoto getPhoto = new RandoPhoto(photo.getObjectId(), photo.getCreatedAt(), photo.getString(ParseConstants.KEY_TITLE), photo
+							.getParseFile(ParseConstants.KEY_FILE).getUrl(), likesNumber, photo.getString(ParseConstants.KEY_CREATED_BY), photo
+							.getDate(ParseConstants.KEY_LASTLIKEDAT), reviwers);
 					getPhotoResult = new PhotoGetResult(getPhoto, GENERALERROR.SUCCESS);
-				}
-				else{
+				} else {
 					getPhotoResult = new PhotoGetResult(null, LibManager.decodeError(e.getCode()));
 				}
-				if(photoGetResult!=null) {photoGetResult.onIPhotoGet(getPhotoResult);}
+				if (photoGetResult != null) {
+					photoGetResult.onIPhotoGet(getPhotoResult);
+				}
 			}
 		});
 	}
-	
-	private void simpleSavePhotoByUsersId(IRandoPhoto photo, String userId1,String userId2, final IPhotoSaveCallback photoSaveCallback){
+
+	private void simpleSavePhotoByUsersId(Bitmap photo, String userId1, String userId2, final IPhotoSaveCallback photoSaveCallback) {
 		final ParseObject photoParse = new ParseObject(ParseConstants.CLASS_PHOTO);
-		photoParse.put(ParseConstants.KEY_TITLE, photo.GetTitle());
-		photoParse.put(ParseConstants.KEY_CREATED_BY, photo.GetCreatedBy());
-		photoParse.put(ParseConstants.KEY_REVIEWERS, getReviewersIds());
-		
-		final ParseFile fileParse = LibManager.fileToParseFile(photo.GetPhoto());
+		photoParse.put(ParseConstants.KEY_CREATED_BY, ParseUser.getCurrentUser().getObjectId());
+		photoParse.put(ParseConstants.KEY_REVIEWERS, getReviewersIds(userId1,userId2));
+
+		saveNewRando(photo, photoSaveCallback, photoParse);
+	}
+
+	private void saveNewRando(Bitmap photo, final IPhotoSaveCallback photoSaveCallback, final ParseObject photoParse) {
+		final ParseFile fileParse = LibManager.BitmapToParseFile(photo);
 		fileParse.saveInBackground(new SaveCallback() {
-			
+
 			@Override
 			public void done(ParseException e) {
-				if (e ==null) {
-					photoParse.put(ParseConstants.KEY_FILE, fileParse);
-					photoParse.saveEventually(new SaveCallback() {
-							@Override
-							public void done(ParseException e) {
-								IPhotoSaveResult photoSaveResult;
-								if (e==null) {
-									photoSaveResult = new PhotoSaveResult(GENERALERROR.SUCCESS);
-								}
-								else {
-									photoSaveResult = new PhotoSaveResult(LibManager.decodeError(e.getCode()));
-								}
-									if (photoSaveCallback!=null) {
-										photoSaveCallback.onPhotoSave(photoSaveResult);
-									}
-							}
-						});
-				}
-				else {
+				if (e == null) {
+					saveNewRandoWithPhoto(photoSaveCallback, photoParse, fileParse);
+				} else {
 					Log.d("simpleSavePhoto", "Error code:" + e);
 				}
 			}
+
+	private void saveNewRandoWithPhoto(final IPhotoSaveCallback photoSaveCallback, final ParseObject photoParse, final ParseFile fileParse) {
+		photoParse.put(ParseConstants.KEY_FILE, fileParse);
+		photoParse.put(ParseConstants.KEY_LIKES, 0);
+		photoParse.put(ParseConstants.KEY_SEND_COUNT, 0);
+		photoParse.saveEventually(new SaveCallback() {
+			@Override
+			public void done(ParseException e) {
+				IPhotoSaveResult photoSaveResult;
+				if (e == null) {
+					photoSaveResult = new PhotoSaveResult(GENERALERROR.SUCCESS);
+				} else {
+					photoSaveResult = new PhotoSaveResult(LibManager.decodeError(e.getCode()));
+				}
+				if (photoSaveCallback != null) {
+					photoSaveCallback.onPhotoSave(photoSaveResult);
+				}
+			}
 		});
-		
-		
-		
 	}
-	private ArrayList<String> getReviewersIds(){
+});
+}
+
+	private ArrayList<String> getReviewersIds(String id1, String id2) {
 		ArrayList<String> reviewers = new ArrayList<String>();
-		reviewers.add(mRandomUserId1);
-		reviewers.add(mRandomUserId2);
+		reviewers.add(id1);
+		reviewers.add(id2);
 		return reviewers;
 	}
 
 	@Override
-	public void GetTotalNumberOfComments(String photoId,
-			final IGetTotalNumberOfCommentsCallback callback) {
+	public void GetTotalNumberOfComments(String photoId, final IGetTotalNumberOfCommentsCallback callback) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_COMMENT);
 		query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
 		query.whereEqualTo(ParseConstants.KEY_PARENT, photoId);
 		query.countInBackground(new CountCallback() {
-			
+
 			@Override
 			public void done(int count, ParseException e) {
 				IGetTotalNumberOfCommentsResult getTotalRandosResult = null;
-				if (e==null){
+				if (e == null) {
 					getTotalRandosResult = new GetTotalNumberOfCommentsResult(count, GENERALERROR.SUCCESS);
-				}
-				else {
+				} else {
 					getTotalRandosResult = new GetTotalNumberOfCommentsResult(0, LibManager.decodeError(e.getCode()));
 				}
-				if (callback!=null){
+				if (callback != null) {
 					callback.onGetTotalNumberOfComments(getTotalRandosResult);
 				}
 			}
 		});
 	}
 
+	@Override
+	public void LikePhotoById(final String photoId, final ILikePhotoCallback likePhotoCallback) {
+		HashMap<String, Object> params = new HashMap<String, Object>();
+		params.put(ParseConstants.KEY_PHOTO_ID_CLOUD, photoId);
+		ParseCloud.callFunctionInBackground("likePhoto", params, new FunctionCallback<Object>() {
+
+
+			@Override
+			public void done(Object arg0, ParseException e) {
+				//Log.d("HashMap", (String) usersArray.get("userId1"));
+				if (e!=null){
+					if (likePhotoCallback !=null){
+						likePhotoCallback.onSuccess(photoId);
+					}
+				}
+				else {
+					if (likePhotoCallback !=null){
+						likePhotoCallback.onFail(photoId,  LibManager.decodeError(e.getCode()));
+					}
+				}
+			}
+		});
+	}
 
 }

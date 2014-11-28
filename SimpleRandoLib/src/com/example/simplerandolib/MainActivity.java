@@ -160,7 +160,7 @@ private void initializeButtons(){
     		String username = "user" + numberUser.substring(numberUser.length()-5);
     		File avatar = createFile();
 
-    		mUserManager.RegisterUser(username, "qwerty", username+"@randoPhoto.org", avatar, CONTEXT, null);
+    		mUserManager.RegisterUser(username, "qwerty", username+"@randoPhoto.org", avatar, null);
     	}
     });
     
@@ -195,8 +195,8 @@ private void initializeButtons(){
     but9.setOnClickListener(new OnClickListener() {
     	@Override
     	public void onClick(View v) {
-    		File file = createFile();
-    		IRandoPhoto photo = new RandoPhoto("Test Photo", file, mUserManager.GetCurrentUser().GetUID());
+    		ImageView view = (ImageView) findViewById(R.id.imageViewLocal);
+			Bitmap photo = drawableToBitmap(view.getBackground());
     		IPhotoSaveCallback callback = new PhotoSaveCallback();
     		mRandoManager.SaveIPhoto(photo, callback);
     	}
@@ -295,6 +295,15 @@ private void initializeButtons(){
     	public void onClick(View v) {
     		LibManager.setPushCallback(new PushReceiveCallback());
     		LibManager.EnablePushNotifications();
+    	}
+    });
+    
+    but19.setText("Like Photo");
+    but19.setOnClickListener(new OnClickListener() {
+    	@Override
+    	public void onClick(View v) {
+    		
+    		mRandoManager.LikePhotoById("jXIXh49Q5W", null);
     	}
     });
 

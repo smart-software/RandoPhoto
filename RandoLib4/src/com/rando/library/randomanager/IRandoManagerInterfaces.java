@@ -5,6 +5,7 @@ import java.util.Date;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 
 import com.rando.library.LibManager.GENERALERROR;
 
@@ -13,12 +14,13 @@ public class IRandoManagerInterfaces {
 
 public interface IRandoManager {
     public IRandoPhoto GetLastRando(IGetLastRandoCallback getLastRandoCallback);
-    public void SaveIPhoto(IRandoPhoto photo, IPhotoSaveCallback photoSaveCallback); //Save photo to database. Also sends to 2 random users. Note: saves eventually. If no network will save when connection established.
+    public void SaveIPhoto(Bitmap photo, IPhotoSaveCallback photoSaveCallback); //Save photo to database. Also sends to 2 random users. Note: saves eventually. If no network will save when connection established.
     public void SaveIComment(IComment comment, ICommentSaveCallback commentSaveCallback);//Save comment to database. Note: saves eventually. If no network will save when connection established.
     public void GetRecentPhotoComments(String photoId, int numberOfRecentComments, ICommentGetCommentCallback commentGetCallback); // get all cooments for this PhotoID
     public void GetComments(String photoId, int fromComment, int toComment, ICommentGetCommentCallback commentGetCallback); // fromComment - the most recent one
     public void GetTotalNumberOfComments(String photoId, IGetTotalNumberOfCommentsCallback callback);
     public void GetPhotoById(String photoId, IPhotoGetCallback photoGetResult);// gets single photo by id
+    public void LikePhotoById(String photoId, ILikePhotoCallback likePhotoCallback);
 }
 public interface IGetLastRandoResult {
 	public IRandoPhoto getRando();
@@ -85,5 +87,10 @@ public interface IPushReceiveResult {
 public interface IPushReceiveCallback {
 	void onPushOpen(Context context, IPushReceiveResult pushReceiveResult);
 	Class<? extends Activity> onPushGetActivityForIntent( Intent intent);
+}
+
+public interface ILikePhotoCallback {
+	void onSuccess(String photoId);
+	void onFail(String photoId, GENERALERROR error);
 }
 }

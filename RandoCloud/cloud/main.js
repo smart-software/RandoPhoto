@@ -7,6 +7,51 @@
 });
 */
 
+Parse.Cloud.define("pick2RandomUsers", function(request, response){
+	var queryCount = new Parse.Query(Parse.User);
+	queryCount.ascending("createdAt");
+	queryCount.notContainedIn("id", [request.user.id]);
+	queryCount.count({
+	  success: function(count) {
+		    // The count request succeeded. Pick two random numbers
+		  	var min = 0;
+		  	var max = count;
+		    var userIndex1 = Math.floor(Math.random() * (max - min + 1)) + min;
+		    var userIndex2 = 1;
+		    for (var i = 0; i < 100; i++) {
+				userIndex2 = Math.floor(Math.random() * (max - min + 1)) + min;
+				if (userIndex1 != userIndex2) {
+					break;
+				}
+			}
+		    
+		    queryCount.skip(userIndex1-1);
+		    queryCount.limit(1);
+		    queryCount.find({
+		    	  success: function(users) {
+		    		  	  var userId1 = new String();
+		    		      userId1 = users[0].id;
+		    		      queryCount.skip(userIndex2-1);
+		    		      queryCount.find({
+		    		    	  success: function(users) {
+		    		    		  var userId2 = new String();
+		    		    		  userId2 = users[0].id;
+		    		    		  var myResponse = { "userId1": userId1, "userId2": userId2};
+		    		    		  response.success(myResponse);
+		    		    	  }
+		    		    	});
+		    		  }
+		    		});
+		    
+		    
+		    
+		  },
+		  error: function(error) {
+		    // The request failed
+		  }
+		});
+});
+
 Parse.Cloud.define("likePhoto", function(request, response) {
 	var photoId = request.params.photoId;
 	var userId = request.user.id;
@@ -14,9 +59,16 @@ Parse.Cloud.define("likePhoto", function(request, response) {
 	query.get(photoId, {
 		  success: function(photo) {
 		    photo.addUnique("likes_id", userId);
+		    photo.remove("Reviewers", userId);
+		    photo.increment("sendCount");
+		    photo.increment("likes");
+		    var currentDate = new Date();
+		    photo.set("LastLikedAt", currentDate);
 		    photo.save();
+		    response.success();
 		  },
 		  error: function(object, error) {
+			response.error();
 		  }
 		});
 	
@@ -24,7 +76,7 @@ Parse.Cloud.define("likePhoto", function(request, response) {
 
 Parse.Cloud.afterSave("Photo", function(request) {
 	
-	if(request.object.existed() == false) {
+	//if(request.object.existed() == false) { //if remove this comment slashes puss-notifications will fire only at creation of photo-object
 	  var reviewersList = request.object.get("Reviewers");
 	  for (var i = 0; i < reviewersList.length; i++) {
 		  Parse.Push.send({
@@ -41,7 +93,7 @@ Parse.Cloud.afterSave("Photo", function(request) {
 			  }
 			});
 		}
-	  }
+	  //}
 	});
 
 Parse.Cloud.job("getRidOfRandos", function(request, status) {
