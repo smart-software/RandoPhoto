@@ -46,6 +46,7 @@ import com.rando.library.randomanager.IRandoManagerInterfaces.IGetLastRandoCallb
 import com.rando.library.randomanager.IRandoManagerInterfaces.IGetTotalNumberOfCommentsCallback;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IPhotoGetCallback;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IPhotoSaveCallback;
+import com.rando.library.randomanager.IRandoManagerInterfaces.IPushReceiveCallback;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IRandoManager;
 import com.rando.library.randomanager.IRandoPhoto;
 import com.rando.library.randomanager.RandoManager;
@@ -118,6 +119,9 @@ private void initializeButtons(){
     	@Override
     	public void onClick(View v) {
     		LibManager.InitializeLibraryLight(CONTEXT);
+    		LibManager.EnablePushNotifications();
+    		IPushReceiveCallback callback = new PushReceiveCallback();
+    		LibManager.setPushCallback(callback);
     	}
     });
     
