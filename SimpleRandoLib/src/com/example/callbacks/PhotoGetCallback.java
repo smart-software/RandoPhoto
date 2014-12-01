@@ -17,6 +17,7 @@ public class PhotoGetCallback implements IPhotoGetCallback{
 		Log.d(TAG, "wow");
 		if (result.getPhotoGetResult()==GENERALERROR.SUCCESS & result.getPhoto()!=null){
 			callbackText = "Received photo by " + result.getPhoto().GetCreatedBy()+ " with title "+ result.getPhoto().GetTitle()+ " (id: " +result.getPhoto().GetCreatedBy()+")";
+			MainActivity.mImageCallback.setImageBitmap(result.getPhoto().GetPhoto());
 		}
 		else {
 			callbackText = "Error "+result.getPhotoGetResult().toString()+ " at: " +TAG;

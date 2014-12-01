@@ -66,7 +66,8 @@ public class MainActivity extends Activity {
 	IUserManager mUserManager = new UserManager();
 	IRandoManager mRandoManager = new RandoManager();
 	IUser mGenericUser;
-	static TextView mCallbackText;
+	public static TextView mCallbackText;
+	public static ImageView mImageCallback;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,7 @@ public class MainActivity extends Activity {
         CONTEXT = getApplication().getApplicationContext();
         textCallback = (TextView) findViewById(R.id.textCallback);
         mCallbackText = (TextView) findViewById(R.id.callback_general_text);
+        mImageCallback = (ImageView) findViewById(R.id.ImageView01);
         initializeButtons();
     
     }
@@ -236,7 +238,7 @@ private void initializeButtons(){
     but12.setOnClickListener(new OnClickListener() {
     	@Override
     	public void onClick(View v) {
-    		String photoId = "r9dxl8r6Wt"; 
+    		String photoId = "HZxfRZDQrL"; 
     		IPhotoGetCallback callback = new PhotoGetCallback();
     		mRandoManager.GetPhotoById(photoId, callback);
     	}
@@ -307,7 +309,7 @@ private void initializeButtons(){
     	@Override
     	public void onClick(View v) {
     		
-    		mRandoManager.LikePhotoById("jXIXh49Q5W", null);
+    		mRandoManager.LikePhotoById("BhWzwbRmtN", null);
     	}
     });
 

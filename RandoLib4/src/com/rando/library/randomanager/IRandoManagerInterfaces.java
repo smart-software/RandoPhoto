@@ -13,7 +13,7 @@ public class IRandoManagerInterfaces {
 	
 
 public interface IRandoManager {
-    public IRandoPhoto GetLastRando(IGetLastRandoCallback getLastRandoCallback);
+    public void GetLastRando(IGetLastRandoCallback getLastRandoCallback);
     public void SaveIPhoto(Bitmap photo, IPhotoSaveCallback photoSaveCallback); //Save photo to database. Also sends to 2 random users. Note: saves eventually. If no network will save when connection established.
     public void SaveIComment(IComment comment, ICommentSaveCallback commentSaveCallback);//Save comment to database. Note: saves eventually. If no network will save when connection established.
     public void GetRecentPhotoComments(String photoId, int numberOfRecentComments, ICommentGetCommentCallback commentGetCallback); // get all cooments for this PhotoID

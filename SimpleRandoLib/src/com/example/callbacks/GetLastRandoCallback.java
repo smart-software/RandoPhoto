@@ -19,6 +19,7 @@ public class GetLastRandoCallback implements IGetLastRandoCallback{
 		Log.d(TAG, "wow");
 		if (result.getError()==GENERALERROR.SUCCESS & result.getRando()!=null){
 			callbackText = "Received photo by " + result.getRando().GetCreatedBy()+ " with title "+ result.getRando().GetTitle()+ " (id: " +result.getRando().GetCreatedBy()+")";
+			MainActivity.mImageCallback.setImageBitmap(result.getRando().GetPhoto());
 		}
 		else {
 			callbackText = "Error "+result.getError().toString()+ " at: " +TAG;

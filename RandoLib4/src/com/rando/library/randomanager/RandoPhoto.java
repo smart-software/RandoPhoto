@@ -1,9 +1,9 @@
 package com.rando.library.randomanager;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import android.graphics.Bitmap;
 
 public class RandoPhoto implements IRandoPhoto{
 	
@@ -11,13 +11,13 @@ public class RandoPhoto implements IRandoPhoto{
 	private Date mCreatedAt;
 	private String mTitle;
 	private String mPhotoFileUrl;
-	private File mPhotoFile;
+	private Bitmap mPhotoFile;
 	private int mLikesNumber;
 	private String mCreatedById;
 	private Date mLastLikedAt;
 	private List<String> mReviewersIds;
 	
-	public RandoPhoto(String title, File photo,String createdById){
+	public RandoPhoto(String title, Bitmap photo,String createdById){
 		mTitle = title;
 		mPhotoFile = photo;
 		mCreatedById = createdById;
@@ -28,6 +28,17 @@ public class RandoPhoto implements IRandoPhoto{
 		mCreatedAt = createdAt;
 		mTitle = title;
 		mPhotoFileUrl = photo;
+		mLikesNumber = likesNumber;
+		mCreatedById = createdById;
+		mLastLikedAt = lastLikedAt;
+		mReviewersIds = reviwers;
+	}
+	
+	public RandoPhoto(String id, Date createdAt, String title, Bitmap photoFile, int likesNumber,String createdById, Date lastLikedAt, List<String> reviwers){
+		mId = id;
+		mCreatedAt = createdAt;
+		mTitle = title;
+		mPhotoFile = photoFile;
 		mLikesNumber = likesNumber;
 		mCreatedById = createdById;
 		mLastLikedAt = lastLikedAt;
@@ -62,7 +73,7 @@ public class RandoPhoto implements IRandoPhoto{
 	}
 	
 	@Override
-	public File GetPhoto() {
+	public Bitmap GetPhoto() {
 		return mPhotoFile;
 	}
 

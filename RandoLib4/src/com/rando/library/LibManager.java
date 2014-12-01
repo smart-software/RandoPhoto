@@ -144,7 +144,7 @@ public final class LibManager{
 		bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
 		byte[] byteArray = stream.toByteArray();
 		byteArray = FileHelper.reduceImageForUpload(byteArray); //SHORT_SIDE_TARGET = 1600
-		ParseFile fileParse = new ParseFile("file.jpg", byteArray);
+		ParseFile fileParse = new ParseFile("file", byteArray);
 		return fileParse;
 	}
 	public static  byte[] convertFileToByte(File fileInput){
@@ -226,6 +226,12 @@ public static Bitmap drawableToBitmap (Drawable drawable) {
 		    drawable.draw(canvas);
 		    return bitmap;
 		}
+
+public static Bitmap byteToBitmap(byte[] bitmapdata) {
+	Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapdata , 0, bitmapdata.length);
+	return bitmap;
+}
+
 private void writeTofile(Bitmap bitmap, File file) {
 	FileOutputStream out = null;
 	try {

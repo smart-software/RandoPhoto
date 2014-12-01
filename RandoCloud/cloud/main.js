@@ -75,10 +75,55 @@ Parse.Cloud.define("likePhoto", function(request, response) {
 });
 
 Parse.Cloud.afterSave("Photo", function(request) {
+if(request.object.existed() == false) {	
+	var queryCount = new Parse.Query(Parse.User);
+	queryCount.ascending("createdAt");
+	queryCount.notContainedIn("id", [request.object.get("createdBy")]);
+	queryCount.count({
+	  success: function(count) {
+		    // The count request succeeded. Pick two random numbers
+		  	var min = 0;
+		  	var max = count;
+		    var userIndex1 = Math.floor(Math.random() * (max - min + 1)) + min;
+		    var userIndex2 = 1;
+		    for (var i = 0; i < 100; i++) {
+				userIndex2 = Math.floor(Math.random() * (max - min + 1)) + min;
+				if (userIndex1 != userIndex2) {
+					break;
+				}
+			}
+		    
+		    queryCount.skip(userIndex1-1);
+		    queryCount.limit(1);
+		    queryCount.find({
+		    	  success: function(users) {
+		    		  	  var userId1 = new String();
+		    		      userId1 = users[0].id;
+		    		      queryCount.skip(userIndex2-1);
+		    		      queryCount.find({
+		    		    	  success: function(users) {
+		    		    		  var userId2 = new String();
+		    		    		  userId2 = users[0].id; 
+		    		    		  var reviewersList = new Array( userId1, userId2);
+		    		    		  request.object.set("Reviewers", reviewersList);
+		    		  		      var currentDate = new Date();
+		    		  		      request.object.set("LastLikedAt", currentDate);
+		    		    		  request.object.save();
+		    		    	  }
+		    		    	});
+		    		  }
+		    		});
+		  },
+		  error: function(error) {
+		    // The request failed
+		  }
+		});
+}
+
 	
-	//if(request.object.existed() == false) { //if remove this comment slashes puss-notifications will fire only at creation of photo-object
-	  var reviewersList = request.object.get("Reviewers");
-	  for (var i = 0; i < reviewersList.length; i++) {
+	if(request.object.existed()==true) { 
+	var reviewersList = request.object.get("Reviewers");
+	for (var i = 0; i < reviewersList.length; i++) {
 		  Parse.Push.send({
 			  channels: [ "user_"+reviewersList[i] ],
 			  data: {
@@ -93,7 +138,7 @@ Parse.Cloud.afterSave("Photo", function(request) {
 			  }
 			});
 		}
-	  //}
+	  }
 	});
 
 Parse.Cloud.job("getRidOfRandos", function(request, status) {

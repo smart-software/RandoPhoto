@@ -17,6 +17,7 @@ import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.FunctionCallback;
 import com.parse.GetCallback;
+import com.parse.GetDataCallback;
 import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -46,12 +47,9 @@ import com.rando.library.randomanager.IRandoManagerInterfaces.IRandoPhotoGetResu
 
 public class RandoManager implements IRandoManager {
 
-	private String mRandomUserId1;
-	private String mRandomUserId2;
-	private int mUserIndex2;
 
 	@Override
-	public IRandoPhoto GetLastRando(final IGetLastRandoCallback getLastRandoCallback) {
+	public void GetLastRando(final IGetLastRandoCallback getLastRandoCallback) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_PHOTO);
 		query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
 		query.whereEqualTo(ParseConstants.KEY_CREATED_BY, ParseUser.getCurrentUser().getObjectId());
@@ -59,17 +57,42 @@ public class RandoManager implements IRandoManager {
 		query.getFirstInBackground(new GetCallback<ParseObject>() {
 
 			@Override
-			public void done(ParseObject rando, ParseException e) {
+			public void done(final ParseObject rando, ParseException e) {
 				IGetLastRandoResult getLastRandoResult;
 				if (e == null) {
-					int likesNumber = 0;
-					if (rando.containsKey(ParseConstants.KEY_LIKES_ID)) {
-						likesNumber = rando.getList(ParseConstants.KEY_LIKES_ID).size();
+					int likesNumber = getLikes(rando);
+					final List<String> listOfReviewers = rando.getList(ParseConstants.KEY_REVIEWERS);
+					ParseFile file = rando.getParseFile(ParseConstants.KEY_FILE);
+					IRandoPhoto randoPhoto = null;
+					if(file.isDataAvailable()){ //indian code alert TODO
+						byte[] byteData = null;
+						try {
+							byteData = file.getData();
+						} catch (ParseException e1) {
+							e1.printStackTrace();
+						}
+						randoPhoto = newFullRando(rando, likesNumber, listOfReviewers, byteData);
 					}
-					List<String> listOfReviewers = rando.getList(ParseConstants.KEY_REVIEWERS);
-					IRandoPhoto randoPhoto = new RandoPhoto(rando.getObjectId(), rando.getCreatedAt(), rando.getString(ParseConstants.KEY_TITLE),
-							rando.getParseFile(ParseConstants.KEY_FILE).getUrl(), likesNumber, rando.getString(ParseConstants.KEY_CREATED_BY), rando
-									.getDate(ParseConstants.KEY_LASTLIKEDAT), listOfReviewers);
+					else {
+						final int  likesNumberFinal = likesNumber; //indian code alert TODO
+						file.getDataInBackground(new GetDataCallback() {
+							
+							@Override
+							public void done(byte[] byteData, ParseException e) {
+								IGetLastRandoResult getLastRandoResult;
+								if (e==null){
+									IRandoPhoto randoPhoto = newFullRando(rando, likesNumberFinal, listOfReviewers, byteData);
+									getLastRandoResult = new GetLastRandoResult(randoPhoto, GENERALERROR.SUCCESS);
+								}
+								else {
+									getLastRandoResult = new GetLastRandoResult(null, LibManager.decodeError(e.getCode()));
+								}
+								if (getLastRandoCallback != null) {
+									getLastRandoCallback.OnGetLastRando(getLastRandoResult);
+								}
+							}
+						});
+					}
 					getLastRandoResult = new GetLastRandoResult(randoPhoto, GENERALERROR.SUCCESS);
 				} else {
 					getLastRandoResult = new GetLastRandoResult(null, LibManager.decodeError(e.getCode()));
@@ -78,14 +101,18 @@ public class RandoManager implements IRandoManager {
 					getLastRandoCallback.OnGetLastRando(getLastRandoResult);
 				}
 			}
+
+
+
+			
 		}); 
-		return null;
 	}
 
 	@Override
 	public void SaveIPhoto(final Bitmap photo, final IPhotoSaveCallback photoSaveCallback) {
+		simpleSavePhotoByUsersId(photo, photoSaveCallback);
 
-		HashMap<String, Object> params = new HashMap<String, Object>(); //empty HashMap, only for compatibility with "callFunctionInBackground"
+		/*HashMap<String, Object> params = new HashMap<String, Object>(); //empty HashMap, only for compatibility with "callFunctionInBackground"
 		ParseCloud.callFunctionInBackground("pick2RandomUsers", params, new FunctionCallback<HashMap<String, Object>>() {
 
 			@Override
@@ -94,7 +121,7 @@ public class RandoManager implements IRandoManager {
 						simpleSavePhotoByUsersId(photo, usersArray.get("userId1").toString(),  usersArray.get("userId2").toString(), photoSaveCallback);
 			
 			}
-		});
+		});*/
 
 	}
 
@@ -198,38 +225,61 @@ public class RandoManager implements IRandoManager {
 	}
 
 	@Override
-	public void GetPhotoById(String photoId, final IPhotoGetCallback photoGetResult) {
+	public void GetPhotoById(String photoId, final IPhotoGetCallback photoGetCallback) {
 		ParseQuery<ParseObject> query = new ParseQuery<ParseObject>(ParseConstants.CLASS_PHOTO);
 		query.setCachePolicy(CachePolicy.CACHE_THEN_NETWORK);
 		query.getInBackground(photoId, new GetCallback<ParseObject>() {
-
 			@Override
-			public void done(ParseObject photo, ParseException e) {
+			public void done(final ParseObject rando, ParseException e) {
 				IRandoPhotoGetResult getPhotoResult;
 				if (e == null) {
-					List<String> reviwers = photo.getList(ParseConstants.KEY_REVIEWERS);
-					int likesNumber = 0;
-					if (photo.containsKey(ParseConstants.KEY_LIKES_ID)) {
-						likesNumber = photo.getList(ParseConstants.KEY_LIKES_ID).size();
+					int likesNumber = getLikes(rando);
+					final List<String> listOfReviewers = rando.getList(ParseConstants.KEY_REVIEWERS);
+					ParseFile file = rando.getParseFile(ParseConstants.KEY_FILE);
+					IRandoPhoto randoPhoto = null;
+					if(file.isDataAvailable()){ //indian code alert TODO
+						byte[] byteData = null;
+						try {
+							byteData = file.getData();
+						} catch (ParseException e1) {
+							e1.printStackTrace();
+						}
+						randoPhoto = newFullRando(rando, likesNumber, listOfReviewers, byteData);
 					}
-					IRandoPhoto getPhoto = new RandoPhoto(photo.getObjectId(), photo.getCreatedAt(), photo.getString(ParseConstants.KEY_TITLE), photo
-							.getParseFile(ParseConstants.KEY_FILE).getUrl(), likesNumber, photo.getString(ParseConstants.KEY_CREATED_BY), photo
-							.getDate(ParseConstants.KEY_LASTLIKEDAT), reviwers);
-					getPhotoResult = new PhotoGetResult(getPhoto, GENERALERROR.SUCCESS);
+					else {
+						final int  likesNumberFinal = likesNumber; //indian code alert TODO
+						file.getDataInBackground(new GetDataCallback() {
+							
+							@Override
+							public void done(byte[] byteData, ParseException e) {
+								IRandoPhotoGetResult getPhotoResult;
+								if (e==null){
+									IRandoPhoto randoPhoto = newFullRando(rando, likesNumberFinal, listOfReviewers, byteData);
+									getPhotoResult = new PhotoGetResult(randoPhoto, GENERALERROR.SUCCESS);
+								}
+								else {
+									getPhotoResult = new PhotoGetResult(null, LibManager.decodeError(e.getCode()));
+								}
+								if (photoGetCallback != null) {
+									photoGetCallback.onIPhotoGet(getPhotoResult);
+								}
+							}
+						});
+					}
+					getPhotoResult = new PhotoGetResult(randoPhoto, GENERALERROR.SUCCESS);
 				} else {
 					getPhotoResult = new PhotoGetResult(null, LibManager.decodeError(e.getCode()));
 				}
-				if (photoGetResult != null) {
-					photoGetResult.onIPhotoGet(getPhotoResult);
+				if (photoGetCallback != null) {
+					photoGetCallback.onIPhotoGet(getPhotoResult);
 				}
 			}
 		});
 	}
 
-	private void simpleSavePhotoByUsersId(Bitmap photo, String userId1, String userId2, final IPhotoSaveCallback photoSaveCallback) {
+	private void simpleSavePhotoByUsersId(Bitmap photo, final IPhotoSaveCallback photoSaveCallback) {
 		final ParseObject photoParse = new ParseObject(ParseConstants.CLASS_PHOTO);
 		photoParse.put(ParseConstants.KEY_CREATED_BY, ParseUser.getCurrentUser().getObjectId());
-		photoParse.put(ParseConstants.KEY_REVIEWERS, getReviewersIds(userId1,userId2));
 
 		saveNewRando(photo, photoSaveCallback, photoParse);
 	}
@@ -320,6 +370,25 @@ public class RandoManager implements IRandoManager {
 				}
 			}
 		});
+	}
+	
+	private IRandoPhoto newFullRando(final ParseObject rando, int likesNumber, final List<String> listOfReviewers, byte[] byteData) {
+		IRandoPhoto randoPhoto;
+		randoPhoto = new RandoPhoto(rando.getObjectId(), rando.getCreatedAt(), rando.getString(ParseConstants.KEY_TITLE),
+				LibManager.byteToBitmap(byteData), likesNumber, rando.getString(ParseConstants.KEY_CREATED_BY), rando
+						.getDate(ParseConstants.KEY_LASTLIKEDAT), listOfReviewers);
+		return randoPhoto;
+	}
+	
+	private int getLikes(final ParseObject rando) {
+		int likesNumber;
+		if (rando.containsKey(ParseConstants.KEY_LIKES_ID)) {
+			likesNumber = rando.getList(ParseConstants.KEY_LIKES_ID).size();
+		}
+		else {
+			likesNumber = 0;
+		}
+		return likesNumber;
 	}
 
 }
