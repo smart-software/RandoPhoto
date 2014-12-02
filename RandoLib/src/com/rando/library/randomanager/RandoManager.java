@@ -1,5 +1,6 @@
 package com.rando.library.randomanager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -110,19 +111,7 @@ public class RandoManager implements IRandoManager {
 
 	@Override
 	public void SaveIPhoto(final Bitmap photo, final IPhotoSaveCallback photoSaveCallback) {
-		simpleSavePhotoByUsersId(photo, photoSaveCallback);
-
-		/*HashMap<String, Object> params = new HashMap<String, Object>(); //empty HashMap, only for compatibility with "callFunctionInBackground"
-		ParseCloud.callFunctionInBackground("pick2RandomUsers", params, new FunctionCallback<HashMap<String, Object>>() {
-
-			@Override
-			public void done(HashMap<String, Object> usersArray, ParseException e) {
-						Log.d("HashMap", (String) usersArray.get("userId1"));
-						simpleSavePhotoByUsersId(photo, usersArray.get("userId1").toString(),  usersArray.get("userId2").toString(), photoSaveCallback);
-			
-			}
-		});*/
-
+		simpleSavePhoto(photo, photoSaveCallback);
 	}
 
 	@Override
@@ -277,7 +266,7 @@ public class RandoManager implements IRandoManager {
 		});
 	}
 
-	private void simpleSavePhotoByUsersId(Bitmap photo, final IPhotoSaveCallback photoSaveCallback) {
+	private void simpleSavePhoto(Bitmap photo, final IPhotoSaveCallback photoSaveCallback) {
 		final ParseObject photoParse = new ParseObject(ParseConstants.CLASS_PHOTO);
 		photoParse.put(ParseConstants.KEY_CREATED_BY, ParseUser.getCurrentUser().getObjectId());
 
@@ -286,6 +275,9 @@ public class RandoManager implements IRandoManager {
 
 	private void saveNewRando(Bitmap photo, final IPhotoSaveCallback photoSaveCallback, final ParseObject photoParse) {
 		final ParseFile fileParse = LibManager.BitmapToParseFile(photo);
+		File lastRandoCacheFile = LibManager.createFile("user_name_last_rando");
+		LibManager.writeTofile(photo, lastRandoCacheFile);
+		
 		fileParse.saveInBackground(new SaveCallback() {
 
 			@Override

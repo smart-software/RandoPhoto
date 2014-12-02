@@ -179,7 +179,7 @@ public final class LibManager{
 		return file;
 	}
 	
-	protected static File createFile(String filename) {
+	public static File createFile(String filename) {
 		// To be safe, you should check that the SDCard is mounted
 	    // using Environment.getExternalStorageState() before doing this.
 	File mediaFile = null;
@@ -201,11 +201,8 @@ public final class LibManager{
 			// 3. Create a file name
 			// 4. Create the file
 			
-			Date now = new Date();
-			String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(now);
-			
 			String path = mediaStorageDir.getPath() + File.separator;
-			mediaFile = new File(path + filename + ".jpg");	
+			mediaFile = new File(path + filename + ".png");	
 		}
 		return mediaFile;
 }
@@ -232,7 +229,7 @@ public static Bitmap byteToBitmap(byte[] bitmapdata) {
 	return bitmap;
 }
 
-private void writeTofile(Bitmap bitmap, File file) {
+public static void writeTofile(Bitmap bitmap, File file) {
 	FileOutputStream out = null;
 	try {
 	    out = new FileOutputStream(file);
