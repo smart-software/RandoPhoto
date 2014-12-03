@@ -9,6 +9,7 @@ import android.util.Log;
 import com.parse.GetCallback;
 import com.parse.GetDataCallback;
 import com.parse.LogInCallback;
+import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -153,6 +154,12 @@ public class UserManager implements IUserManager {
         }
 
         
+    }
+    
+    public void convertAnonUserToUser(String username, String password, String email, File avatar,final IUserRegisterCallback registerCallback){
+    	if (ParseAnonymousUtils.isLinked(ParseUser.getCurrentUser())) {
+    		  RegisterUser(username, password, email, avatar, registerCallback);
+    		}
     }
 
 

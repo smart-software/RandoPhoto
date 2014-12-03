@@ -295,12 +295,11 @@ private void initializeButtons(){
     	}
     });
     
-    but18.setText("Initialize broadcast");
+    but18.setText("register AnonUser");
     but18.setOnClickListener(new OnClickListener() {
     	@Override
     	public void onClick(View v) {
-    		LibManager.setPushCallback(new PushReceiveCallback());
-    		LibManager.EnablePushNotifications();
+    		LibManager.createAnonymousUser();
     	}
     });
     

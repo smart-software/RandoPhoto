@@ -23,8 +23,10 @@ import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
+import com.parse.LogInCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
+import com.parse.ParseAnonymousUtils;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseInstallation;
@@ -35,7 +37,7 @@ import com.parse.SaveCallback;
 import com.rando.library.randomanager.IRandoManagerInterfaces.IPushReceiveCallback;
 
 public final class LibManager{
-    private static final String LIBVERSION = "3.2";
+    private static final String LIBVERSION = "3.9";
     private static final String LIBTAG = "[RandoLib]";
     public static IPushReceiveCallback pushCallbackStatic; //TODO Find another way to pass this callback to pushRecevier
 
@@ -47,7 +49,22 @@ public final class LibManager{
         createAppDir();
     }
 
-    public static void LogText(String text) {
+    public static void createAnonymousUser() { // TODO place callback for login
+    	LogInCallback loginCallback = new LogInCallback() {
+  		  @Override
+  		  public void done(ParseUser user, ParseException e) {
+  		    if (e != null) {
+  		      Log.d("MyApp", "Anonymous login failed.");
+  		    } else {
+  		      Log.d("MyApp", "Anonymous user logged in.");
+  		    }
+  		  }
+  		};
+    	ParseAnonymousUtils.logIn(loginCallback);
+    	ParseUser.getCurrentUser().saveInBackground();
+	}
+
+	public static void LogText(String text) {
         Log.d(LIBTAG, text);
     }
 
@@ -60,6 +77,8 @@ public final class LibManager{
         // keys of RandoApp in Parse.com database. Client keys.
         Parse.initialize(context, "CBAorkA9uvUOf6PFYmVE2zw0Tkf54D8FX4LWaB6l", "axKtzQMEXuOK3Q9hzk84MQxE9Uk1Y6fty9RhA14B");
     }
+    
+    
 
     
     public static void EnableDataStore(Context context){
@@ -68,6 +87,7 @@ public final class LibManager{
     }
     
     public static void EnablePushNotifications(){
+    	if (ParseUser.getCurrentUser()!=null) {
     	// enable Push Notifications by subscribing to broadcast channel
     	ParsePush.subscribeInBackground("", new SaveCallback() {
 			
@@ -102,6 +122,10 @@ public final class LibManager{
     	installation.put("user",ParseUser.getCurrentUser());
     	installation.saveInBackground();
     }
+    
+  }
+    
+    
     
     public static void setPushCallback(IPushReceiveCallback pushCallback) {
     	pushCallbackStatic = pushCallback;

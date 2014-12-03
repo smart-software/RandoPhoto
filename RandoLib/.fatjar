@@ -1,10 +1,10 @@
 #Fat Jar Configuration File
-#Wed Dec 03 16:59:39 GST 2014
+#Wed Dec 03 18:12:23 GST 2014
 onejar.license.required=true
 manifest.classpath=
 manifest.removesigners=true
 onejar.checkbox=false
-jarname=D\:\\1. Science\\AndrWork\\RandoPhoto - Libraries\\3.8\\randojavalib.jar
+jarname=D\:\\1. Science\\AndrWork\\RandoPhoto - Libraries\\3.9\\randojavalib.jar
 manifest.mergeall=true
 manifest.mainclass=
 manifest.file=<createnew>
