@@ -1,7 +1,5 @@
 package com.rando.library.usermanager;
-/**
- * Created by SERGant on 11.10.2014.
- */
+
 import java.io.File;
 
 import android.content.Context;

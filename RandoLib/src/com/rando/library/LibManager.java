@@ -44,6 +44,7 @@ public final class LibManager{
         // keys of RandoApp in Parse.com database. Client keys.
         Parse.initialize(context, "CBAorkA9uvUOf6PFYmVE2zw0Tkf54D8FX4LWaB6l", "axKtzQMEXuOK3Q9hzk84MQxE9Uk1Y6fty9RhA14B");
         EnablePushNotifications();
+        createAppDir();
     }
 
     public static void LogText(String text) {
@@ -206,7 +207,25 @@ public final class LibManager{
 		}
 		return mediaFile;
 }
-private static boolean isExternalStorageAvailable() {
+	
+	private static void createAppDir(){
+		if (isExternalStorageAvailable()) {
+			// 1. Get the external storage directory
+			String appName = "RandoPhoto";
+			File mediaStorageDir = new File(
+					Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+					appName);
+			
+			// 2. Create our subdirectory
+			if (! mediaStorageDir.exists()) {
+				if (! mediaStorageDir.mkdirs()) {
+					Log.e("TAG", "Failed to create directory.");
+				}
+			}
+	}
+}
+
+	private static boolean isExternalStorageAvailable() {
 	String state = Environment.getExternalStorageState();
 			
 	if (state.equals(Environment.MEDIA_MOUNTED)) {
