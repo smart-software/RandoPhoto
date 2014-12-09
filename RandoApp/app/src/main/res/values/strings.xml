@@ -18,6 +18,11 @@
     <string name="register_error_userexist_text">User already exists</string>
     <string name="register_error_badpassword_text">Bad password</string>
 
+    <string-array name="rando_menu_string">
+        <item>RandoPhoto</item>
+        <item>Settings</item>
+    </string-array>
+
     <string name="my_rando_tab_text">My Rando</string>
     <string name="top_randos_tab_text">Top Randos</string>
     <string name="rando_message_tab_text">Rando Message</string>
