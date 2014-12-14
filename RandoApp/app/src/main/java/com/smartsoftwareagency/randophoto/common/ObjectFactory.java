@@ -1,4 +1,4 @@
-package com.smartsoftwareagency.randophoto;
+package com.smartsoftwareagency.randophoto.common;
 
 import com.rando.library.usermanager.UserInterfaces.IUserManager;
 import com.rando.library.usermanager.UserManager;

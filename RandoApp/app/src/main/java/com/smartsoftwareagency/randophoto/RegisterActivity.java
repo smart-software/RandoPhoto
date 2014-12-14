@@ -10,7 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.rando.library.usermanager.UserInterfaces;
-import com.rando.library.usermanager.UserManager;
+import com.smartsoftwareagency.randophoto.common.ObjectFactory;
 
 /**
  * Created by SERGant on 08.12.2014.

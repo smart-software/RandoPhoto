@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.rando.library.usermanager.UserInterfaces;
+import com.smartsoftwareagency.randophoto.common.ObjectFactory;
 
 /**
  * Created by SERGant on 08.12.2014.
@@ -82,6 +83,8 @@ public class LoginActivity extends Activity implements View.OnClickListener, Use
 
         if(loginResult == UserInterfaces.LOGINRESULT.SUCCESS) {
             Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
         }
         else {
