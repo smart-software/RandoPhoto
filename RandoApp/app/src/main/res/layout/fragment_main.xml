@@ -36,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <TabWidget
                 android:id="@android:id/tabs"
                 android:layout_width="match_parent"
@@ -58,6 +59,7 @@
         android:layout_height="50dp"
         android:layout_weight="0"
         android:background="@color/bottom_panel_color">
+        <!-- TODO: убрать Linear Layout -->
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
@@ -67,15 +69,8 @@
                 android:id="@+id/btnNewRando"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="5"
+                android:layout_weight="10"
                 android:src="@drawable/camera_icon"
-                android:scaleType="centerInside"/>
-            <ImageButton
-                android:id="@+id/btnSettings"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="5"
-                android:src="@drawable/settings_icon"
                 android:scaleType="centerInside"/>
         </LinearLayout>
     </FrameLayout>

@@ -27,6 +27,8 @@ public class MainActivity extends ActionBarActivity {
     private ListView m_randoMenuView;
     private ActionBarDrawerToggle m_randoMenuToggle;
     private String[] m_randoMenuList;
+    private FragmentMain m_mainView;
+    private FragmentSettings m_settingsView;
 
     public MainActivity() {
         super();
@@ -109,6 +111,8 @@ public class MainActivity extends ActionBarActivity {
         m_drawerLayout.setDrawerListener(m_randoMenuToggle);
 
         // Initialize the first fragment when the application first loads.
+        m_mainView = new FragmentMain();
+        m_settingsView = new FragmentSettings();
         if (savedInstanceState == null) {
             showView(0); // Show main fragment
         }
@@ -163,10 +167,10 @@ public class MainActivity extends ActionBarActivity {
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragment = new FragmentMain();
+                fragment = m_mainView;
                 break;
             case 1:
-                fragment = new FragmentSettings();
+                fragment = m_settingsView;
                 break;
             case 2:
                 UserInterfaces.IUserManager userManager = ObjectFactory.getUserManager();
