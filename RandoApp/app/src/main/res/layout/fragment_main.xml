@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- https://maxalley.wordpress.com/2013/05/18/android-creating-a-tab-layout-with-fragmenttabhost-and-fragments/ -->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -7,26 +9,34 @@
     style="@android:style/Theme.NoTitleBar"
     android:background="@color/background_color">
 
-    <!-- Top panel -->
-<!--
-    <LinearLayout
+    <android.support.v4.app.FragmentTabHost
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@android:id/tabhost"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0"
-        android:background="@color/top_panel_color">
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:src="@drawable/rando_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"/>
-        </FrameLayout>
-    </LinearLayout>
--->
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical" >
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:background="@color/tab_widget_color"/>
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </android.support.v4.app.FragmentTabHost>
     <!-- TAB HOST HERE -->
+    <!--
     <TabHost
         android:id="@android:id/tabhost"
         android:layout_width="match_parent"
@@ -51,6 +61,7 @@
             </FrameLayout>
         </LinearLayout>
     </TabHost>
+    -->
     <!-- END OF TAB HOST -->
 
     <!-- Bottom panel -->
